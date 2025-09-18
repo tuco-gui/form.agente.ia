@@ -34,6 +34,21 @@
     .btn-next { background-color: #e31937; }
     .btn-prev { background-color: #003f5c; }
     .btn-submit { background-color: #f2a900; margin-left: auto; }
+
+    /* --- POP-UP "Obrigado" (sem mexer no layout do form) --- */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.45);
+      display: none; align-items: center; justify-content: center; z-index: 9999;
+    }
+    .modal-card {
+      background: #fff; width: 90%; max-width: 560px; border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.2); padding: 28px;
+    }
+    .modal-card h3 { margin: 0 0 8px; color: #e31937; }
+    .modal-card p { margin: 0 0 16px; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
+    .btn-ok { background: #f2a900; color: #fff; border: 0; border-radius: 6px; padding: 10px 16px; cursor: pointer; }
+    .btn-ok:hover { filter: brightness(0.95); }
   </style>
 </head>
 <body>
@@ -195,7 +210,18 @@
     </div>
   </form>
 
-  <!-- Navegação entre seções (mesmo visual) -->
+  <!-- POP-UP Obrigado -->
+  <div class="modal-backdrop" id="thanksModal">
+    <div class="modal-card">
+      <h3>✅ Obrigado!</h3>
+      <p>Recebemos seu formulário. Em breve entraremos em contato.</p>
+      <div class="modal-actions">
+        <button class="btn-ok" onclick="closeThanks()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navegação entre seções (visual intacto) -->
   <script>
     const sections = document.querySelectorAll('.section');
     const nextBtn = document.querySelector('.btn-next');
@@ -212,12 +238,22 @@
     function nextSection() { if (current < sections.length - 1) { current++; showSection(current); } }
     function prevSection() { if (current > 0) { current--; showSection(current); } }
     showSection(current);
+
+    function openThanks() {
+      const m = document.getElementById('thanksModal');
+      if (m) m.style.display = 'flex';
+    }
+    function closeThanks() {
+      const m = document.getElementById('thanksModal');
+      if (m) m.style.display = 'none';
+    }
+    window.closeThanks = closeThanks; // para o botão do pop-up
   </script>
 
   <!-- Supabase (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <!-- Envio + Validação -->
+  <!-- Envio + Insert com UUID + Pop-up -->
   <script>
     const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
@@ -226,19 +262,23 @@
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const form = document.getElementById("formulario");
 
-    // Garante que o submit SEMPRE dispara (vamos validar manualmente)
-    form.setAttribute('novalidate','');
+    // uuid v4 para garantir ID mesmo se a tabela não tiver default
+    function uuidv4() {
+      if (crypto && crypto.randomUUID) return crypto.randomUUID();
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+        const r = (Math.random() * 16) | 0, v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    }
 
+    // Validação manual dos obrigatórios (evita "cliquei e nada")
     function mustFillOK() {
-      // Campos realmente obrigatórios da primeira seção
       const reqNames = ["empresa","responsavel","email","telefone","data"];
       for (const n of reqNames) {
         const el = form.querySelector(`[name="${n}"]`);
         if (!el || !el.value || (el.type === "email" && !el.value.includes("@"))) {
-          // Mostra validação nativa do navegador
           el && el.reportValidity && el.reportValidity();
-          // Volta para a primeira seção para o usuário ver
-          if (typeof showSection === "function") { current = 0; showSection(current); }
+          current = 0; showSection(current);
           return false;
         }
       }
@@ -248,6 +288,7 @@
     function coreRow() {
       const fd = new FormData(form);
       return {
+        id: uuidv4(),
         empresa: (fd.get("empresa") || "").toString().trim() || null,
         responsavel: (fd.get("responsavel") || "").toString().trim() || null,
         email: (fd.get("email") || "").toString().trim() || null
@@ -256,12 +297,9 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-
-      // 1) Validação dos obrigatórios (resolve o "clico e não acontece nada")
       if (!mustFillOK()) return;
 
       try {
-        // 2) Salva no Supabase
         const row = coreRow();
         const { error } = await sb.from(TABLE).insert([row]);
 
@@ -271,11 +309,13 @@
           return;
         }
 
-        // 3) Feedback e reset
-        alert("Formulário enviado com sucesso!");
+        // Sucesso: abre pop-up, reseta e volta ao início
+        openThanks();
         form.reset();
-        current = 0;
-        if (typeof showSection === "function") showSection(current);
+        current = 0; showSection(current);
+
+        // Se preferir redirecionar para /obrigado, descomente:
+        // window.location.href = "/obrigado";
       } catch (err) {
         console.error("[Supabase] Exceção:", err);
         alert("Falha inesperada. Tente novamente.");
@@ -284,3 +324,4 @@
   </script>
 </body>
 </html>
+
