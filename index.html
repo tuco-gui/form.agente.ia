@@ -20,66 +20,22 @@
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
       padding: 30px;
     }
-    h2 {
-      color: #e31937;
-      margin-top: 0;
-    }
-    p.descricao {
-      margin-top: -10px;
-      margin-bottom: 20px;
-      font-size: 14px;
-    }
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
+    h2 { color: #e31937; margin-top: 0; }
+    p.descricao { margin-top: -10px; margin-bottom: 20px; font-size: 14px; }
+    label { display: block; margin-top: 20px; font-weight: bold; }
     input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-top: 5px;
+      width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;
     }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .checkbox-group, .radio-group {
-      margin-top: 10px;
-    }
-    .checkbox-group label,
-    .radio-group label {
-      font-weight: normal;
-    }
-    .section {
-      display: none;
-    }
-    .section.active {
-      display: block;
-    }
-    .buttons {
-      margin-top: 30px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 5px;
-      color: #fff;
-      cursor: pointer;
-    }
-    .btn-next {
-      background-color: #e31937;
-    }
-    .btn-prev {
-      background-color: #003f5c;
-    }
-    .btn-submit {
-      background-color: #f2a900;
-      margin-left: auto;
-    }
+    textarea { resize: vertical; min-height: 80px; }
+    .checkbox-group, .radio-group { margin-top: 10px; }
+    .checkbox-group label, .radio-group label { font-weight: normal; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .buttons { margin-top: 30px; display: flex; justify-content: space-between; }
+    .btn { padding: 12px 20px; border: none; border-radius: 5px; color: #fff; cursor: pointer; }
+    .btn-next { background-color: #e31937; }
+    .btn-prev { background-color: #003f5c; }
+    .btn-submit { background-color: #f2a900; margin-left: auto; }
   </style>
 </head>
 <body>
@@ -212,13 +168,10 @@
       <h2>🔗 Links e Integrações</h2>
       <label>Link do WhatsApp com UTM (se houver):</label>
       <input type="url" name="whatsapp">
-
       <label>Link de CRM:</label>
       <input type="url" name="crm">
-
       <label>Link de agendamento online:</label>
       <input type="url" name="agendamento">
-
       <label>Outras ferramentas:</label>
       <textarea name="ferramentas"></textarea>
     </div>
@@ -227,7 +180,6 @@
       <h2>📎 Anexos</h2>
       <label>Link ou descrição dos logotipos:</label>
       <textarea name="logos"></textarea>
-
       <label>Outros materiais de apoio:</label>
       <textarea name="materiais"></textarea>
     </div>
@@ -245,7 +197,7 @@
     </div>
   </form>
 
-  <!-- Script de navegação entre seções (inalterado no visual) -->
+  <!-- Navegação entre seções (inalterado visualmente) -->
   <script>
     const sections = document.querySelectorAll('.section');
     const nextBtn = document.querySelector('.btn-next');
@@ -264,21 +216,34 @@
     showSection(current);
   </script>
 
-  <!-- Script de envio + Supabase (único listener de submit) -->
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+  <!-- SDK UMD do Supabase (sem module/import) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-    // Credenciais (anon key no front)
+  <!-- Envio para o Supabase -->
+  <script>
+    // Credenciais (front usa anon key)
     const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
     const TABLE = "respostas_formulario";
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Cliente Supabase (via UMD)
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const form = document.getElementById("formulario");
+
+    // uuid v4 (compat)
+    function uuidv4() {
+      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+        const r = (Math.random() * 16) | 0, v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    }
 
     function coreFields(formEl) {
       const fd = new FormData(formEl);
       return {
+        id: uuidv4(), // garante id sempre
         empresa: (fd.get("empresa") || "").toString().trim() || null,
         responsavel: (fd.get("responsavel") || "").toString().trim() || null,
         email: (fd.get("email") || "").toString().trim() || null
@@ -286,7 +251,7 @@
     }
 
     form.addEventListener("submit", async (e) => {
-      e.preventDefault(); // não navega; primeiro grava
+      e.preventDefault(); // controlamos o fluxo
       try {
         const row = coreFields(form);
         if (!row.empresa && !row.responsavel && !row.email) {
@@ -294,19 +259,19 @@
           return;
         }
 
-        const { error } = await supabase.from(TABLE).insert([row]);
+        const { error } = await sb.from(TABLE).insert([row]);
         if (error) {
           console.error("[Supabase] Erro:", error);
-          alert("Falha ao enviar. Tente novamente em instantes.");
+          alert("Falha ao enviar: " + (error.message || "ver console"));
           return;
         }
 
         alert("Formulário enviado com sucesso!");
-        // Se quiser redirecionar para uma página de obrigado, descomente:
-        // window.location.href = "/obrigado";
-        // Senão, apenas limpa e volta para a primeira seção:
         form.reset();
-        if (window.showSection) { window.showSection(0); }
+        current = 0;
+        if (typeof showSection === "function") showSection(current);
+        // Se preferir redirecionar:
+        // window.location.href = "/obrigado";
       } catch (err) {
         console.error("[Supabase] Exceção:", err);
         alert("Falha inesperada. Tente novamente.");
@@ -315,4 +280,3 @@
   </script>
 </body>
 </html>
-
