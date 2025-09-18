@@ -14,13 +14,10 @@
     textarea { resize: vertical; min-height: 80px; }
     .checkbox-group, .radio-group { margin-top: 10px; }
     .checkbox-group label, .radio-group label { font-weight: normal; }
-    .section { display: none; }
-    .section.active { display: block; }
+    .section { display: none; } .section.active { display: block; }
     .buttons { margin-top: 30px; display: flex; justify-content: space-between; }
     .btn { padding: 12px 20px; border: none; border-radius: 5px; color: #fff; cursor: pointer; }
-    .btn-next { background-color: #e31937; }
-    .btn-prev { background-color: #003f5c; }
-    .btn-submit { background-color: #f2a900; margin-left: auto; }
+    .btn-next { background-color: #e31937; } .btn-prev { background-color: #003f5c; } .btn-submit { background-color: #f2a900; margin-left: auto; }
 
     /* Pop-up Obrigado */
     .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; z-index: 9999; }
@@ -37,7 +34,6 @@
   </style>
 </head>
 <body>
-  <!-- novalidate: sem validação nativa (evita erro “not focusable” por campos ocultos) -->
   <form class="container" id="formulario" novalidate>
     <h1>🧠 Formulário de Coleta – Agente de IA | Figueira Marketing</h1>
     <p class="descricao">Conectando propósito à performance.<br>Preencha com atenção — quanto mais completo, mais assertivo será o agente.</p>
@@ -116,19 +112,14 @@
       <h2>🧱 Informações Fixas</h2>
       <label>Endereço completo:</label>
       <textarea name="endereco"></textarea>
-
       <label>Horários de funcionamento:</label>
       <textarea name="horario"></textarea>
-
       <label>Formas de pagamento aceitas:</label>
       <textarea name="pagamento"></textarea>
-
       <label>Política de reagendamento ou cancelamento:</label>
       <textarea name="politica"></textarea>
-
       <label>Prazo médio de entrega ou execução:</label>
       <textarea name="prazo"></textarea>
-
       <label>Outros dados importantes:</label>
       <textarea name="outros"></textarea>
     </div>
@@ -157,10 +148,8 @@
       <h2>🚩 Restrições e Cuidados</h2>
       <label>Informações que o agente NÃO pode divulgar:</label>
       <textarea name="restricoes"></textarea>
-
       <label>Erros inaceitáveis:</label>
       <textarea name="erros"></textarea>
-
       <label>O que não pode faltar de jeito nenhum:</label>
       <textarea name="essencial"></textarea>
     </div>
@@ -209,119 +198,211 @@
     </div>
   </div>
 
-  <!-- Navegação + Validação 1ª tela -->
+  <!-- Navegação + validação 1ª tela -->
   <script>
-    const sections = document.querySelectorAll('.section');
-    const nextBtn = document.querySelector('.btn-next');
-    const prevBtn = document.querySelector('.btn-prev');
-    const submitBtn = document.querySelector('.btn-submit');
-    const emailInput = document.getElementById('email');
-    const telInput = document.getElementById('telefone');
-    const emailErr = document.getElementById('err-email');
-    const telErr = document.getElementById('err-telefone');
-    let current = 0;
+    const sections=document.querySelectorAll('.section');
+    const nextBtn=document.querySelector('.btn-next');
+    const prevBtn=document.querySelector('.btn-prev');
+    const submitBtn=document.querySelector('.btn-submit');
+    const emailInput=document.getElementById('email');
+    const telInput=document.getElementById('telefone');
+    const emailErr=document.getElementById('err-email');
+    const telErr=document.getElementById('err-telefone');
+    let current=0;
 
-    function showSection(index) {
-      sections.forEach((section, i) => section.classList.toggle('active', i === index));
-      prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
-      nextBtn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
-      submitBtn.style.display = index === sections.length - 1 ? 'inline-block' : 'none';
+    function showSection(i){
+      sections.forEach((s,idx)=>s.classList.toggle('active',idx===i));
+      prevBtn.style.display=i===0?'none':'inline-block';
+      nextBtn.style.display=i===sections.length-1?'none':'inline-block';
+      submitBtn.style.display=i===sections.length-1?'inline-block':'none';
     }
-
-    function isEmailValid(v) { if (!v) return true; const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/; return re.test(v); }
-    function isTelefoneValid(v) { if (!v) return true; const d=v.replace(/\D/g,''); return d.length===10||d.length===11; }
-
+    function isEmailValid(v){ if(!v) return true; const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/; return re.test(v); }
+    function isTelefoneValid(v){ if(!v) return true; const d=v.replace(/\D/g,''); return d.length===10||d.length===11; }
     function showEmailError(){ emailErr.style.display='block'; emailInput.classList.add('has-error'); }
-    function clearEmailError(){ emailErr.style.display='none';  emailInput.classList.remove('has-error'); }
-    function showTelError(){   telErr.style.display='block';   telInput.classList.add('has-error'); }
-    function clearTelError(){  telErr.style.display='none';    telInput.classList.remove('has-error'); }
-
+    function clearEmailError(){ emailErr.style.display='none'; emailInput.classList.remove('has-error'); }
+    function showTelError(){ telErr.style.display='block'; telInput.classList.add('has-error'); }
+    function clearTelError(){ telErr.style.display='none'; telInput.classList.remove('has-error'); }
     emailInput.addEventListener('input',()=>{ isEmailValid(emailInput.value.trim())?clearEmailError():showEmailError(); });
     emailInput.addEventListener('blur', ()=>{ isEmailValid(emailInput.value.trim())?clearEmailError():showEmailError(); });
-    telInput.addEventListener('input',  ()=>{ isTelefoneValid(telInput.value.trim())?clearTelError():showTelError(); });
-    telInput.addEventListener('blur',   ()=>{ isTelefoneValid(telInput.value.trim())?clearTelError():showTelError(); });
-
+    telInput.addEventListener('input', ()=>{ isTelefoneValid(telInput.value.trim())?clearTelError():showTelError(); });
+    telInput.addEventListener('blur',  ()=>{ isTelefoneValid(telInput.value.trim())?clearTelError():showTelError(); });
     function validateFirstScreen(){
       const ev=isEmailValid(emailInput.value.trim());
       const tv=isTelefoneValid(telInput.value.trim());
       if(!ev) showEmailError(); else clearEmailError();
       if(!tv) showTelError();   else clearTelError();
-      if(!ev || !tv){ current=0; showSection(current); ( !ev ? emailInput : telInput ).focus(); return false; }
+      if(!ev||!tv){ current=0; showSection(current); (!ev?emailInput:telInput).focus(); return false; }
       return true;
     }
-
     function nextSection(){ if(current===0 && !validateFirstScreen()) return; if(current<sections.length-1){ current++; showSection(current); } }
     function prevSection(){ if(current>0){ current--; showSection(current); } }
-
     function openThanks(){ const m=document.getElementById('thanksModal'); if(m) m.style.display='flex'; }
     function closeThanks(){ const m=document.getElementById('thanksModal'); if(m) m.style.display='none'; }
-    window.closeThanks = closeThanks;
-
+    window.closeThanks=closeThanks;
     showSection(current);
   </script>
 
   <!-- Supabase (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <!-- Envio para Supabase (salva campos principais + payload JSON) -->
+  <!-- Envio para Supabase (mapeia TODAS as colunas do seu CSV + payload) -->
   <script>
-    const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
-    const TABLE = "respostas_formulario";
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const form = document.getElementById("formulario");
+    const SUPABASE_URL="https://wzeltidcqegclovfxayd.supabase.co";
+    const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
+    const TABLE="respostas_formulario";
+    const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+    const form=document.getElementById("formulario");
 
     // Captura TODO o form como JSON (arrays para names repetidos)
     function formToJSON(formEl){
-      const fd = new FormData(formEl);
-      const data = {};
-      for (const [key, value] of fd.entries()){
-        if (data[key] !== undefined){
-          if (!Array.isArray(data[key])) data[key] = [data[key]];
-          data[key].push(value);
-        } else {
-          data[key] = value;
-        }
+      const fd=new FormData(formEl); const data={};
+      for(const [k,v] of fd.entries()){
+        if(data[k]!==undefined){ if(!Array.isArray(data[k])) data[k]=[data[k]]; data[k].push(v); }
+        else { data[k]=v; }
       }
       return data;
     }
 
+    // Helpers pra montar textos agregados (sem mexer no layout)
+    function buildFAQ(fd){
+      const list=[]; for(let i=1;i<=10;i++){ const v=(fd[`faq${i}`]||"").toString().trim(); if(v) list.push(`- ${v}`); }
+      return list.join("\n") || null;
+    }
+    function buildInfoFixas(fd){
+      const parts=[];
+      if(fd.endereco) parts.push(`Endereço: ${fd.endereco}`);
+      if(fd.horario) parts.push(`Horário: ${fd.horario}`);
+      if(fd.pagamento) parts.push(`Pagamentos: ${fd.pagamento}`);
+      if(fd.politica) parts.push(`Política: ${fd.politica}`);
+      if(fd.prazo) parts.push(`Prazo: ${fd.prazo}`);
+      if(fd.outros) parts.push(`Outros: ${fd.outros}`);
+      return parts.length?parts.join("\n"):null;
+    }
+    function buildObjetivo(fd){
+      const arr=[]; 
+      if(Array.isArray(fd.objetivo)) arr.push(...fd.objetivo);
+      else if(fd.objetivo) arr.push(fd.objetivo);
+      if(fd.objetivoOutro) arr.push(`Outro: ${fd.objetivoOutro}`);
+      return arr.length?arr.join(", "):null;
+    }
+    function buildTom(fd){
+      if(fd.tom) return fd.tom;
+      if(fd.tomOutro) return `Outro: ${fd.tomOutro}`;
+      return null;
+    }
+    function buildIntegracoes(fd){
+      const parts=[];
+      if(fd.whatsapp) parts.push(`WhatsApp: ${fd.whatsapp}`);
+      if(fd.crm) parts.push(`CRM: ${fd.crm}`);
+      if(fd.agendamento) parts.push(`Agendamento: ${fd.agendamento}`);
+      if(fd.ferramentas) parts.push(`Ferramentas: ${fd.ferramentas}`);
+      return parts.length?parts.join("\n"):null;
+    }
+    function buildAnexos(fd){
+      const parts=[];
+      if(fd.logos) parts.push(`Logos: ${fd.logos}`);
+      if(fd.materiais) parts.push(`Materiais: ${fd.materiais}`);
+      return parts.length?parts.join("\n"):null;
+    }
+
     function coreRow(){
-      const full = formToJSON(form);
+      const full=formToJSON(form);
+
+      // === Campos diretos
+      const empresa=(full.empresa||"").trim()||null;
+      const responsavel=(full.responsavel||"").trim()||null;
+      const email=(full.email||"").trim()||null;
+      const telefone=(full.telefone||"").trim()||null;
+      const data_preenchimento=(full.data||"").trim()||null; // se preferir created_at do banco, pode ficar null
+      const setor=(full.setor||"").trim()||null;
+      const produtos_servicos=(full.produtos||"").trim()||null;
+      const publico_alvo=(full.publico||"").trim()||null;
+      const site=(full.site||"").trim()||null;
+
+      // === Compostos
+      const objetivo_agente=buildObjetivo(full);
+      // campo "restricoes" da DB vamos usar do formulário "restricoes" (sem juntar "erros" e "essencial")
+      const restricoes=(full.restricoes||"").trim()||null;
+      const faq=buildFAQ(full);
+      const info_fixas=buildInfoFixas(full);
+      const tom_de_voz=buildTom(full);
+      const etico_cristao=(full.tomCristao||"").trim()||null;
+      const integracoes=buildIntegracoes(full);
+      const anexos=buildAnexos(full);
+      const observacoes_finais=(full.obs||"").trim()||null;
+
+      // OBS: "criado_em" e "created_at" ficam por conta do banco (default/trigger)
+
       return {
-        empresa: (full.empresa || "").trim() || null,
-        responsavel: (full.responsavel || "").trim() || null,
-        email: (full.email || "").trim() || null,
-        telefone: (full.telefone || "").trim() || null,
+        empresa, responsavel, email, telefone, data_preenchimento, setor,
+        produtos_servicos, publico_alvo, site,
+        objetivo_agente, restricoes, faq, info_fixas, tom_de_voz, etico_cristao,
+        integracoes, anexos, observacoes_finais,
         payload: full
       };
     }
 
     form.addEventListener("submit", async (e)=>{
       e.preventDefault();
-      if (!validateFirstScreen()) return;
+      // valida só a primeira tela (e-mail/telefone)
+      function isEmailValid(v){ if(!v) return true; const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/; return re.test(v); }
+      function isTelefoneValid(v){ if(!v) return true; const d=v.replace(/\D/g,''); return d.length===10||d.length===11; }
+      const ev=isEmailValid(document.getElementById('email').value.trim());
+      const tv=isTelefoneValid(document.getElementById('telefone').value.trim());
+      if(!ev||!tv){ document.querySelector('.btn-prev').style.display='none'; /* garante 1ª tela */
+        if(!ev){ document.getElementById('err-email').style.display='block'; document.getElementById('email').classList.add('has-error'); }
+        if(!tv){ document.getElementById('err-telefone').style.display='block'; document.getElementById('telefone').classList.add('has-error'); }
+        document.querySelectorAll('.section').forEach((s,i)=>s.classList.toggle('active',i===0));
+        return;
+      }
 
       try{
-        const row = coreRow();
+        const row=coreRow();
         const { error } = await sb.from(TABLE).insert([row]);
-        if (error){ console.error("[Supabase] Erro:", error); alert("Falha ao enviar: " + (error.message || "ver console")); return; }
+        if(error){ console.error("[Supabase] Erro:",error); alert("Falha ao enviar: "+(error.message||"ver console")); return; }
 
-        // (Opcional) Disparo de webhook do n8n com o mesmo JSON:
-        // fetch("https://SEU-N8N.com/webhook/agente-ia-on-submit", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify(row)
-        // }).catch(()=>{});
-
-        openThanks();
+        // popup + reset
+        document.getElementById('thanksModal').style.display='flex';
         form.reset();
-        clearEmailError(); clearTelError();
-        current = 0; showSection(current);
+        document.getElementById('err-email').style.display='none';
+        document.getElementById('err-telefone').style.display='none';
+        document.getElementById('email').classList.remove('has-error');
+        document.getElementById('telefone').classList.remove('has-error');
+        // volta à primeira
+        document.querySelectorAll('.section').forEach((s,i)=>s.classList.toggle('active',i===0));
+        document.querySelector('.btn-prev').style.display='none';
+        document.querySelector('.btn-next').style.display='inline-block';
+        document.querySelector('.btn-submit').style.display='none';
       }catch(err){
-        console.error("[Supabase] Exceção:", err);
+        console.error("[Supabase] Exceção:",err);
         alert("Falha inesperada. Tente novamente.");
       }
     });
+
+    // navegação (idêntica)
+    function nextSection(){
+      // mesma trava da 1ª tela
+      if(document.querySelector('.section.active')===document.querySelectorAll('.section')[0]){
+        const ev=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((document.getElementById('email').value||'').trim()) || !(document.getElementById('email').value||'').trim();
+        const d=(document.getElementById('telefone').value||'').replace(/\D/g,'');
+        const tv=(d.length===0 || d.length===10 || d.length===11);
+        if(!ev){ document.getElementById('err-email').style.display='block'; document.getElementById('email').classList.add('has-error'); return; }
+        if(!tv){ document.getElementById('err-telefone').style.display='block'; document.getElementById('telefone').classList.add('has-error'); return; }
+      }
+      const sections=document.querySelectorAll('.section'); let idx=[...sections].findIndex(s=>s.classList.contains('active'));
+      if(idx<sections.length-1){ sections[idx].classList.remove('active'); sections[idx+1].classList.add('active'); }
+      document.querySelector('.btn-prev').style.display= idx+1===0?'none':'inline-block';
+      document.querySelector('.btn-next').style.display= idx+1===sections.length-1?'none':'inline-block';
+      document.querySelector('.btn-submit').style.display= idx+1===sections.length-1?'inline-block':'none';
+    }
+    function prevSection(){
+      const sections=document.querySelectorAll('.section'); let idx=[...sections].findIndex(s=>s.classList.contains('active'));
+      if(idx>0){ sections[idx].classList.remove('active'); sections[idx-1].classList.add('active'); }
+      document.querySelector('.btn-prev').style.display= idx-1===0?'none':'inline-block';
+      document.querySelector('.btn-next').style.display= idx-1===sections.length-1?'none':'inline-block';
+      document.querySelector('.btn-submit').style.display= idx-1===sections.length-1?'inline-block':'none';
+    }
+    window.prevSection=prevSection; window.nextSection=nextSection; window.closeThanks=()=>{ document.getElementById('thanksModal').style.display='none'; };
   </script>
 </body>
 </html>
