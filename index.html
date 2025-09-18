@@ -1,181 +1,184 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Formulário Figueira Marketing</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulário Agente de IA | Figueira Marketing</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
       background-color: #f7f4ed;
+      margin: 0;
+      padding: 0;
       color: #000;
     }
-    header {
-      background-color: #003f5c;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    form {
-      padding: 20px;
+    .container {
       max-width: 800px;
-      margin: auto;
+      margin: 50px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    h2 {
+      color: #e31937;
+      margin-top: 0;
+    }
+    p.descricao {
+      margin-top: -10px;
+      margin-bottom: 20px;
+      font-size: 14px;
     }
     label {
       display: block;
-      margin-top: 15px;
+      margin-top: 20px;
       font-weight: bold;
     }
-    input, select, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
       border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
+      border-radius: 5px;
+      margin-top: 5px;
     }
-    button {
-      margin-top: 25px;
-      background-color: #f2a900;
-      color: #000;
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .checkbox-group, .radio-group {
+      margin-top: 10px;
+    }
+    .checkbox-group label,
+    .radio-group label {
+      font-weight: normal;
+    }
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .btn {
+      padding: 12px 20px;
       border: none;
-      padding: 15px;
-      font-size: 18px;
-      font-weight: bold;
+      border-radius: 5px;
+      color: #fff;
       cursor: pointer;
-      border-radius: 6px;
-      width: 100%;
     }
-    button:hover {
-      background-color: #ddb000;
+    .btn-next {
+      background-color: #e31937;
     }
-    footer {
+    .btn-prev {
       background-color: #003f5c;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      margin-top: 40px;
+    }
+    .btn-submit {
+      background-color: #f2a900;
+      margin-left: auto;
     }
   </style>
 </head>
 <body>
+  <form class="container" id="formulario">
+    <h1>🧠 Formulário de Coleta – Agente de IA | Figueira Marketing</h1>
+    <p class="descricao">Conectando propósito à performance.<br>Preencha com atenção — quanto mais completo, mais assertivo será o agente.</p>
 
-<header>
-  <h1>Briefing Inteligente – Figueira Marketing</h1>
-  <p>Preencha todas as informações abaixo para criarmos seu agente inteligente personalizado.</p>
-</header>
+    <!-- TODAS AS SEÇÕES -->
+    <!-- MANTIDO IGUAL AO SEU HTML FINAL -->
+    <!-- ... (COLAR AQUI TODAS AS DIVs .section DO FORMULÁRIO QUE JÁ ESTÃO ACIMA) -->
 
-<form id="formulario">
+    <!-- Botões de navegação -->
+    <div class="buttons">
+      <button type="button" class="btn btn-prev" onclick="prevSection()">Voltar</button>
+      <button type="button" class="btn btn-next" onclick="nextSection()">Próxima etapa</button>
+      <button type="submit" class="btn btn-submit" style="display: none;">Enviar</button>
+    </div>
+  </form>
 
-  <label>Empresa</label>
-  <input type="text" name="empresa" required>
+  <!-- Script de controle de etapas e envio para o Supabase -->
+  <script>
+    const sections = document.querySelectorAll('.section');
+    const nextBtn = document.querySelector('.btn-next');
+    const prevBtn = document.querySelector('.btn-prev');
+    const submitBtn = document.querySelector('.btn-submit');
+    let current = 0;
 
-  <label>Responsável</label>
-  <input type="text" name="responsavel" required>
-
-  <label>Email</label>
-  <input type="email" name="email" required>
-
-  <label>Telefone</label>
-  <input type="text" name="telefone">
-
-  <label>Data do Preenchimento</label>
-  <input type="date" name="data_preenchimento">
-
-  <label>Setor de atuação da empresa</label>
-  <input type="text" name="setor">
-
-  <label>Principais produtos/serviços oferecidos</label>
-  <textarea name="produtos_servicos"></textarea>
-
-  <label>Público-alvo ideal</label>
-  <textarea name="publico_alvo"></textarea>
-
-  <label>Website oficial ou redes sociais</label>
-  <input type="url" name="site">
-
-  <label>Objetivo principal do agente inteligente</label>
-  <textarea name="objetivo_agente"></textarea>
-
-  <label>Informações que o agente NÃO pode dizer (restrições)</label>
-  <textarea name="restricoes"></textarea>
-
-  <label>Perguntas frequentes (FAQ)</label>
-  <textarea name="faq"></textarea>
-
-  <label>Informações fixas que o agente deve citar (ex: link de WhatsApp, contato, etc)</label>
-  <textarea name="info_fixas"></textarea>
-
-  <label>Tom de voz desejado (ex: informal, profissional, divertido, religioso, neutro, etc)</label>
-  <input type="text" name="tom_de_voz">
-
-  <label>
-    <input type="checkbox" name="etico_cristao"> Deseja que o agente siga princípios éticos cristãos?
-  </label>
-
-  <label>Integrações desejadas (ex: Kommo, Notion, Google Sheets, N8N...)</label>
-  <textarea name="integracoes"></textarea>
-
-  <label>Links de anexos importantes (PDFs, catálogos, apresentações...)</label>
-  <textarea name="anexos"></textarea>
-
-  <label>Observações finais</label>
-  <textarea name="observacoes_finais"></textarea>
-
-  <button type="submit">Enviar formulário</button>
-</form>
-
-<footer>
-  &copy; 2025 Figueira Marketing — Todos os direitos reservados.
-</footer>
-
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
-
-  const SUPABASE_URL = 'https://wzeltidcqegclovfxayd.supabase.co'
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI'
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-
-  document.getElementById("formulario").addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(e.target);
-
-    const data = {
-      empresa: formData.get("empresa"),
-      responsavel: formData.get("responsavel"),
-      email: formData.get("email"),
-      telefone: formData.get("telefone"),
-      data_preenchimento: formData.get("data_preenchimento"),
-      setor: formData.get("setor"),
-      produtos_servicos: formData.get("produtos_servicos"),
-      publico_alvo: formData.get("publico_alvo"),
-      site: formData.get("site"),
-      objetivo_agente: formData.get("objetivo_agente"),
-      restricoes: formData.get("restricoes"),
-      faq: formData.get("faq"),
-      info_fixas: formData.get("info_fixas"),
-      tom_de_voz: formData.get("tom_de_voz"),
-      etico_cristao: formData.get("etico_cristao") === "on",
-      integracoes: formData.get("integracoes"),
-      anexos: formData.get("anexos"),
-      observacoes_finais: formData.get("observacoes_finais")
-    };
-
-    const { error } = await supabase
-      .from('respostas_formulario')
-      .insert([data]);
-
-    if (error) {
-      alert("❌ Erro ao enviar: " + error.message);
-    } else {
-      alert("✅ Formulário enviado com sucesso!");
-      e.target.reset();
+    function showSection(index) {
+      sections.forEach((section, i) => section.classList.toggle('active', i === index));
+      prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
+      nextBtn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
+      submitBtn.style.display = index === sections.length - 1 ? 'inline-block' : 'none';
     }
-  });
-</script>
 
+    function nextSection() {
+      if (current < sections.length - 1) {
+        current++;
+        showSection(current);
+      }
+    }
+
+    function prevSection() {
+      if (current > 0) {
+        current--;
+        showSection(current);
+      }
+    }
+
+    showSection(current);
+
+    const supabaseUrl = "https://wzeltidcqegclovfxayd.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
+    const tableName = "respostas"; // Nome da tabela no Supabase
+
+    document.getElementById('formulario').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = {};
+
+      for (const [key, value] of formData.entries()) {
+        if (data[key]) {
+          if (Array.isArray(data[key])) {
+            data[key].push(value);
+          } else {
+            data[key] = [data[key], value];
+          }
+        } else {
+          data[key] = value;
+        }
+      }
+
+      try {
+        const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': supabaseKey,
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          throw new Error("Erro ao enviar para Supabase: " + response.statusText);
+        }
+
+        alert('Formulário enviado com sucesso!');
+        form.reset();
+        current = 0;
+        showSection(current);
+      } catch (error) {
+        console.error("Erro ao enviar:", error);
+        alert('Erro ao enviar o formulário.');
+      }
+    });
+  </script>
 </body>
 </html>
+
