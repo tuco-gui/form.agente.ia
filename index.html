@@ -6,7 +6,7 @@
   <title>Formulário Agente de IA | Figueira Marketing</title>
   <style>
     body { font-family: Arial, sans-serif; background-color: #f7f4ed; margin: 0; padding: 0; color: #000; }
-    .container { max-width: 800px; margin: 50px auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,.1); padding: 30px; }
+    .container { max-width: 800px; margin: 50px auto; background: #fff; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,.1); padding: 30px; }
     h2 { color: #e31937; margin-top: 0; }
     p.descricao { margin-top: -10px; margin-bottom: 20px; font-size: 14px; }
     label { display: block; margin-top: 20px; font-weight: bold; }
@@ -31,13 +31,13 @@
     .btn-ok { background: #f2a900; color: #fff; border: 0; border-radius: 6px; padding: 10px 16px; cursor: pointer; }
     .btn-ok:hover { filter: brightness(0.95); }
 
-    /* Erros em linha na 1ª tela */
+    /* Erros em linha (1ª tela) */
     .field-error { color: #e31937; font-size: 12px; margin-top: 6px; display: none; }
     .has-error { border-color: #e31937 !important; }
   </style>
 </head>
 <body>
-  <!-- novalidate: sem validação nativa (evita erro de campos ocultos) -->
+  <!-- novalidate: sem validação nativa (evita erro “not focusable” por campos ocultos) -->
   <form class="container" id="formulario" novalidate>
     <h1>🧠 Formulário de Coleta – Agente de IA | Figueira Marketing</h1>
     <p class="descricao">Conectando propósito à performance.<br>Preencha com atenção — quanto mais completo, mais assertivo será o agente.</p>
@@ -228,51 +228,33 @@
       submitBtn.style.display = index === sections.length - 1 ? 'inline-block' : 'none';
     }
 
-    function isEmailValid(v) {
-      if (!v) return true; // vazio é permitido
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(v);
-    }
-    function isTelefoneValid(v) {
-      if (!v) return true; // vazio é permitido
-      const digits = v.replace(/\D/g, '');
-      return digits.length === 10 || digits.length === 11; // fixo (10) ou celular (11)
-    }
+    function isEmailValid(v) { if (!v) return true; const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/; return re.test(v); }
+    function isTelefoneValid(v) { if (!v) return true; const d=v.replace(/\D/g,''); return d.length===10||d.length===11; }
 
-    function showEmailError() { emailErr.style.display = 'block'; emailInput.classList.add('has-error'); }
-    function clearEmailError() { emailErr.style.display = 'none'; emailInput.classList.remove('has-error'); }
-    function showTelError()    { telErr.style.display = 'block';  telInput.classList.add('has-error'); }
-    function clearTelError()   { telErr.style.display = 'none';   telInput.classList.remove('has-error'); }
+    function showEmailError(){ emailErr.style.display='block'; emailInput.classList.add('has-error'); }
+    function clearEmailError(){ emailErr.style.display='none';  emailInput.classList.remove('has-error'); }
+    function showTelError(){   telErr.style.display='block';   telInput.classList.add('has-error'); }
+    function clearTelError(){  telErr.style.display='none';    telInput.classList.remove('has-error'); }
 
-    // Feedback em tempo real (1ª tela)
-    emailInput.addEventListener('input', () => { isEmailValid(emailInput.value.trim()) ? clearEmailError() : showEmailError(); });
-    emailInput.addEventListener('blur',  () => { isEmailValid(emailInput.value.trim()) ? clearEmailError() : showEmailError(); });
-    telInput.addEventListener('input',   () => { isTelefoneValid(telInput.value.trim()) ? clearTelError() : showTelError(); });
-    telInput.addEventListener('blur',    () => { isTelefoneValid(telInput.value.trim()) ? clearTelError() : showTelError(); });
+    emailInput.addEventListener('input',()=>{ isEmailValid(emailInput.value.trim())?clearEmailError():showEmailError(); });
+    emailInput.addEventListener('blur', ()=>{ isEmailValid(emailInput.value.trim())?clearEmailError():showEmailError(); });
+    telInput.addEventListener('input',  ()=>{ isTelefoneValid(telInput.value.trim())?clearTelError():showTelError(); });
+    telInput.addEventListener('blur',   ()=>{ isTelefoneValid(telInput.value.trim())?clearTelError():showTelError(); });
 
-    // Valida 1ª tela e mantém o usuário nela se houver erro
-    function validateFirstScreen() {
-      const ev = isEmailValid(emailInput.value.trim());
-      const tv = isTelefoneValid(telInput.value.trim());
-      if (!ev) showEmailError(); else clearEmailError();
-      if (!tv) showTelError(); else clearTelError();
-      if (!ev || !tv) {
-        current = 0;
-        showSection(current);
-        ( !ev ? emailInput : telInput ).focus();
-        return false;
-      }
+    function validateFirstScreen(){
+      const ev=isEmailValid(emailInput.value.trim());
+      const tv=isTelefoneValid(telInput.value.trim());
+      if(!ev) showEmailError(); else clearEmailError();
+      if(!tv) showTelError();   else clearTelError();
+      if(!ev || !tv){ current=0; showSection(current); ( !ev ? emailInput : telInput ).focus(); return false; }
       return true;
     }
 
-    function nextSection() {
-      if (current === 0 && !validateFirstScreen()) return; // trava aqui se houver erro
-      if (current < sections.length - 1) { current++; showSection(current); }
-    }
-    function prevSection() { if (current > 0) { current--; showSection(current); } }
+    function nextSection(){ if(current===0 && !validateFirstScreen()) return; if(current<sections.length-1){ current++; showSection(current); } }
+    function prevSection(){ if(current>0){ current--; showSection(current); } }
 
-    function openThanks() { const m = document.getElementById('thanksModal'); if (m) m.style.display = 'flex'; }
-    function closeThanks() { const m = document.getElementById('thanksModal'); if (m) m.style.display = 'none'; }
+    function openThanks(){ const m=document.getElementById('thanksModal'); if(m) m.style.display='flex'; }
+    function closeThanks(){ const m=document.getElementById('thanksModal'); if(m) m.style.display='none'; }
     window.closeThanks = closeThanks;
 
     showSection(current);
@@ -281,45 +263,61 @@
   <!-- Supabase (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <!-- Envio para Supabase -->
+  <!-- Envio para Supabase (salva campos principais + payload JSON) -->
   <script>
     const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
     const TABLE = "respostas_formulario";
-
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const form = document.getElementById("formulario");
 
-    function coreRow() {
-      const fd = new FormData(form);
+    // Captura TODO o form como JSON (arrays para names repetidos)
+    function formToJSON(formEl){
+      const fd = new FormData(formEl);
+      const data = {};
+      for (const [key, value] of fd.entries()){
+        if (data[key] !== undefined){
+          if (!Array.isArray(data[key])) data[key] = [data[key]];
+          data[key].push(value);
+        } else {
+          data[key] = value;
+        }
+      }
+      return data;
+    }
+
+    function coreRow(){
+      const full = formToJSON(form);
       return {
-        empresa: (fd.get("empresa") || "").toString().trim() || null,
-        responsavel: (fd.get("responsavel") || "").toString().trim() || null,
-        email: (fd.get("email") || "").toString().trim() || null
+        empresa: (full.empresa || "").trim() || null,
+        responsavel: (full.responsavel || "").trim() || null,
+        email: (full.email || "").trim() || null,
+        telefone: (full.telefone || "").trim() || null,
+        payload: full
       };
     }
 
-    form.addEventListener("submit", async (e) => {
+    form.addEventListener("submit", async (e)=>{
       e.preventDefault();
-      // Valida 1ª tela antes de enviar
       if (!validateFirstScreen()) return;
 
-      try {
+      try{
         const row = coreRow();
         const { error } = await sb.from(TABLE).insert([row]);
-        if (error) { console.error("[Supabase] Erro:", error); alert("Falha ao enviar: " + (error.message || "ver console")); return; }
+        if (error){ console.error("[Supabase] Erro:", error); alert("Falha ao enviar: " + (error.message || "ver console")); return; }
+
+        // (Opcional) Disparo de webhook do n8n com o mesmo JSON:
+        // fetch("https://SEU-N8N.com/webhook/agente-ia-on-submit", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify(row)
+        // }).catch(()=>{});
 
         openThanks();
         form.reset();
-        // limpa erros visuais
-        (document.getElementById('err-email')||{}).style.display = 'none';
-        (document.getElementById('err-telefone')||{}).style.display = 'none';
-        document.getElementById('email').classList.remove('has-error');
-        document.getElementById('telefone').classList.remove('has-error');
-
-        // volta à 1ª tela
+        clearEmailError(); clearTelError();
         current = 0; showSection(current);
-      } catch (err) {
+      }catch(err){
         console.error("[Supabase] Exceção:", err);
         alert("Falha inesperada. Tente novamente.");
       }
@@ -327,4 +325,3 @@
   </script>
 </body>
 </html>
-
