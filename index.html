@@ -64,57 +64,80 @@
     <div id="step-1">
       <h2>Informações Básicas</h2>
       <p class="description">Preencha abaixo os dados iniciais da sua empresa. Essas informações nos ajudarão a entender o contexto geral do seu negócio.</p>
-
       <label for="nome">Nome da empresa</label>
       <input type="text" id="nome" name="nome" required />
-
       <label for="site">Site ou rede social principal</label>
       <input type="url" id="site" name="site" placeholder="https://www.exemplo.com" />
-
       <label for="cidade">Cidade</label>
       <input type="text" id="cidade" name="cidade" required />
-
       <label for="estado">Estado</label>
       <select id="estado" name="estado" required>
         <option value="">Selecione o estado</option>
         <option value="SP">SP</option>
         <option value="RJ">RJ</option>
         <option value="MG">MG</option>
-        <!-- adicionar os outros estados... -->
+        <option value="PR">PR</option>
+        <option value="RS">RS</option>
+        <option value="BA">BA</option>
+        <!-- outros estados -->
       </select>
-
-      <button type="button" class="button-next" onclick="mostrarProximaEtapa()">Próxima etapa</button>
+      <button type="button" class="button-next" onclick="nextStep(1)">Próxima etapa</button>
     </div>
 
     <!-- Etapa 2 -->
     <div id="step-2" class="hidden">
       <h2>Sobre o Negócio</h2>
-      <p class="description">Agora nos conte um pouco sobre o seu negócio e sua atuação no mercado.</p>
-
-      <label for="segmento">Qual é o segmento da sua empresa?</label>
-      <input type="text" id="segmento" name="segmento" required />
-
-      <label for="tempo">Há quanto tempo o negócio está ativo?</label>
-      <input type="text" id="tempo" name="tempo" placeholder="Ex: 3 anos" required />
-
-      <label for="descricao">Descreva brevemente sua empresa</label>
-      <textarea id="descricao" name="descricao" rows="5" required></textarea>
-
-      <button type="button" class="button-next" onclick="mostrarEtapa3()">Próxima etapa</button>
+      <p class="description">Conte um pouco sobre a sua empresa e sua atuação no mercado.</p>
+      <label for="segmento">Segmento da empresa</label>
+      <input type="text" id="segmento" name="segmento" />
+      <label for="tempo">Tempo de atuação</label>
+      <input type="text" id="tempo" name="tempo" placeholder="Ex: 3 anos" />
+      <label for="descricao">Breve descrição da empresa</label>
+      <textarea id="descricao" name="descricao" rows="4"></textarea>
+      <button type="button" class="button-next" onclick="nextStep(2)">Próxima etapa</button>
     </div>
 
-    <!-- Você pode continuar adicionando outras etapas com o mesmo padrão -->
+    <!-- Etapa 3 -->
+    <div id="step-3" class="hidden">
+      <h2>Objetivos</h2>
+      <p class="description">Quais são os objetivos da empresa ao contratar marketing?</p>
+      <label for="objetivos">Objetivos principais</label>
+      <textarea id="objetivos" name="objetivos" rows="4"></textarea>
+      <button type="button" class="button-next" onclick="nextStep(3)">Próxima etapa</button>
+    </div>
+
+    <!-- Etapa 4 -->
+    <div id="step-4" class="hidden">
+      <h2>Público-Alvo</h2>
+      <p class="description">Quem são os seus clientes ideais?</p>
+      <label for="publico">Descreva seu público-alvo</label>
+      <textarea id="publico" name="publico" rows="4"></textarea>
+      <button type="button" class="button-next" onclick="nextStep(4)">Próxima etapa</button>
+    </div>
+
+    <!-- Etapa 5 -->
+    <div id="step-5" class="hidden">
+      <h2>Dores do Cliente</h2>
+      <p class="description">Quais os principais problemas e dores que seu cliente enfrenta?</p>
+      <label for="dores">Liste as principais dores</label>
+      <textarea id="dores" name="dores" rows="4"></textarea>
+      <button type="button" class="button-next" onclick="nextStep(5)">Próxima etapa</button>
+    </div>
+
+    <!-- Etapa 6 -->
+    <div id="step-6" class="hidden">
+      <h2>Proposta de Valor</h2>
+      <p class="description">O que torna seu negócio único?</p>
+      <label for="valor">Diferenciais e proposta de valor</label>
+      <textarea id="valor" name="valor" rows="4"></textarea>
+      <button type="submit" class="button-next">Enviar</button>
+    </div>
   </div>
 
   <script>
-    function mostrarProximaEtapa() {
-      document.getElementById('step-1').classList.add('hidden');
-      document.getElementById('step-2').classList.remove('hidden');
-    }
-
-    function mostrarEtapa3() {
-      // Aqui virá a lógica para mostrar a Etapa 3 quando ela for criada
-      alert("Aqui entra a Etapa 3: Objetivos do negócio");
+    function nextStep(currentStep) {
+      document.getElementById(`step-${currentStep}`).classList.add("hidden");
+      document.getElementById(`step-${currentStep + 1}`).classList.remove("hidden");
     }
   </script>
 </body>
