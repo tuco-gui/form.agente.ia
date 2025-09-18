@@ -245,6 +245,7 @@
     </div>
   </form>
 
+  <!-- Script de navegação entre seções (inalterado no visual) -->
   <script>
     const sections = document.querySelectorAll('.section');
     const nextBtn = document.querySelector('.btn-next');
@@ -258,81 +259,60 @@
       nextBtn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
       submitBtn.style.display = index === sections.length - 1 ? 'inline-block' : 'none';
     }
-
-    function nextSection() {
-      if (current < sections.length - 1) {
-        current++;
-        showSection(current);
-      }
-    }
-
-    function prevSection() {
-      if (current > 0) {
-        current--;
-        showSection(current);
-      }
-    }
-
-const form = document.getElementById('formulario'); // você já tem isso mais abaixo também
-form.addEventListener('submit', function(e) {
-  e.preventDefault();               // mantém o alerta
-  alert('Formulário enviado com sucesso!');
-  form.submit();                    // <-- esta linha faz o botão "funcionar"
-});
-
-
+    function nextSection() { if (current < sections.length - 1) { current++; showSection(current); } }
+    function prevSection() { if (current > 0) { current--; showSection(current); } }
     showSection(current);
   </script>
+
+  <!-- Script de envio + Supabase (único listener de submit) -->
   <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
-  // === CREDENCIAIS (front-end: usar SEMPRE a anon key) ===
-  const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
+    // Credenciais (anon key no front)
+    const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
+    const TABLE = "respostas_formulario";
 
-  // === NOME DA TABELA (exatamente como está no Supabase) ===
-  const TABLE = "respostas_formulario";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const form = document.getElementById("formulario");
 
-  // Cria o client
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // Pega seu formulário existente (id="formulario")
-  const form = document.getElementById("formulario");
-
-  // Helper para extrair só os campos que EXISTEM na tabela
-  function pickCoreFields(formEl) {
-    const fd = new FormData(formEl);
-    // Trim básico pra limpar espaços
-    const empresa = (fd.get("empresa") || "").toString().trim() || null;
-    const responsavel = (fd.get("responsavel") || "").toString().trim() || null;
-    const email = (fd.get("email") || "").toString().trim() || null;
-    return { empresa, responsavel, email };
-  }
-
-  // Listener adicional (não remove o seu; roda junto e não muda o UX)
-  form.addEventListener("submit", async function supabaseInsertHandler(evt) {
-    // NÃO cancelo o submit aqui. Seu listener já dá preventDefault e mostra o alert.
-    // Eu só insiro em background assim que o usuário clica em Enviar.
-    try {
-      const row = pickCoreFields(form);
-      // Validação bem leve pra evitar inserts vazios:
-      if (!row.empresa && !row.responsavel && !row.email) return;
-
-      const { error } = await supabase
-        .from(TABLE)
-        .insert([ row ]);
-
-      if (error) {
-        console.error("[Supabase] Erro ao inserir:", error);
-        // Mantém seu UX; só loga erro. Se quiser feedback visual depois, me fala.
-      } else {
-        console.log("[Supabase] Inserido com sucesso:", row);
-      }
-    } catch (e) {
-      console.error("[Supabase] Falha inesperada:", e);
+    function coreFields(formEl) {
+      const fd = new FormData(formEl);
+      return {
+        empresa: (fd.get("empresa") || "").toString().trim() || null,
+        responsavel: (fd.get("responsavel") || "").toString().trim() || null,
+        email: (fd.get("email") || "").toString().trim() || null
+      };
     }
-  });
-</script>
 
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault(); // não navega; primeiro grava
+      try {
+        const row = coreFields(form);
+        if (!row.empresa && !row.responsavel && !row.email) {
+          alert("Preencha os campos iniciais antes de enviar.");
+          return;
+        }
+
+        const { error } = await supabase.from(TABLE).insert([row]);
+        if (error) {
+          console.error("[Supabase] Erro:", error);
+          alert("Falha ao enviar. Tente novamente em instantes.");
+          return;
+        }
+
+        alert("Formulário enviado com sucesso!");
+        // Se quiser redirecionar para uma página de obrigado, descomente:
+        // window.location.href = "/obrigado";
+        // Senão, apenas limpa e volta para a primeira seção:
+        form.reset();
+        if (window.showSection) { window.showSection(0); }
+      } catch (err) {
+        console.error("[Supabase] Exceção:", err);
+        alert("Falha inesperada. Tente novamente.");
+      }
+    });
+  </script>
 </body>
 </html>
+
