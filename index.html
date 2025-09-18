@@ -30,10 +30,14 @@
     .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
     .btn-ok { background: #f2a900; color: #fff; border: 0; border-radius: 6px; padding: 10px 16px; cursor: pointer; }
     .btn-ok:hover { filter: brightness(0.95); }
+
+    /* Mensagens de erro em linha */
+    .field-error { color: #e31937; font-size: 12px; margin-top: 6px; display: none; }
+    .has-error { border-color: #e31937 !important; }
   </style>
 </head>
 <body>
-  <!-- novalidate resolve o erro “not focusable” dos campos escondidos -->
+  <!-- Sem validação nativa; validamos só o e-mail no JS -->
   <form class="container" id="formulario" novalidate>
     <h1>🧠 Formulário de Coleta – Agente de IA | Figueira Marketing</h1>
     <p class="descricao">Conectando propósito à performance.<br>Preencha com atenção — quanto mais completo, mais assertivo será o agente.</p>
@@ -42,19 +46,20 @@
     <div class="section active">
       <h2>🔰 Identificação</h2>
       <label>Nome da empresa:</label>
-      <input type="text" name="empresa" required>
+      <input type="text" name="empresa">
 
       <label>Responsável pelo projeto:</label>
-      <input type="text" name="responsavel" required>
+      <input type="text" name="responsavel">
 
       <label>E-mail de contato:</label>
-      <input type="email" name="email" required>
+      <input type="email" name="email" id="email">
+      <div id="err-email" class="field-error">Corrija o campo <strong>E-mail</strong>. Use um formato válido: exemplo@dominio.com.</div>
 
       <label>Telefone / WhatsApp:</label>
-      <input type="tel" name="telefone" required>
+      <input type="tel" name="telefone">
 
       <label>Data de preenchimento:</label>
-      <input type="date" name="data" required>
+      <input type="date" name="data">
     </div>
 
     <div class="section">
@@ -203,7 +208,7 @@
     </div>
   </div>
 
-  <!-- Navegação entre seções (mesmo visual) -->
+  <!-- Navegação entre seções -->
   <script>
     const sections = document.querySelectorAll('.section');
     const nextBtn = document.querySelector('.btn-next');
@@ -217,7 +222,11 @@
       nextBtn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
       submitBtn.style.display = index === sections.length - 1 ? 'inline-block' : 'none';
     }
-    function nextSection() { if (current < sections.length - 1) { current++; showSection(current); } }
+    function nextSection() {
+      // Se e-mail da 1ª tela estiver inválido, mostra erro e não avança
+      if (current === 0 && !emailOK()) { showEmailError(); return; }
+      if (current < sections.length - 1) { current++; showSection(current); }
+    }
     function prevSection() { if (current > 0) { current--; showSection(current); } }
     showSection(current);
 
@@ -229,7 +238,7 @@
   <!-- Supabase (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <!-- Envio para Supabase com validação manual -->
+  <!-- Envio para Supabase + validação de e-mail com mensagem específica -->
   <script>
     const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
@@ -237,19 +246,33 @@
 
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const form = document.getElementById("formulario");
+    const emailInput = document.getElementById("email");
+    const emailErr = document.getElementById("err-email");
 
-    // validação manual só dos obrigatórios
-    function mustFillOK() {
-      const req = ["empresa","responsavel","email","telefone","data"];
-      for (const name of req) {
-        const el = form.querySelector(`[name="${name}"]`);
-        if (!el) return false;
-        const val = (el.value || "").trim();
-        if (!val) { el.focus(); return false; }
-        if (name === "email" && !val.includes("@")) { el.focus(); return false; }
-      }
-      return true;
+    // Validação de e-mail (não obrigatório; só valida se tiver conteúdo)
+    function emailOK() {
+      const v = (emailInput.value || "").trim();
+      if (!v) return true; // vazio é permitido
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(v);
     }
+    function showEmailError() {
+      emailErr.style.display = "block";
+      emailInput.classList.add("has-error");
+      emailInput.focus();
+    }
+    function clearEmailError() {
+      emailErr.style.display = "none";
+      emailInput.classList.remove("has-error");
+    }
+
+    // Feedback em tempo real
+    emailInput.addEventListener("input", () => {
+      if (emailOK()) clearEmailError(); else showEmailError();
+    });
+    emailInput.addEventListener("blur", () => {
+      if (emailOK()) clearEmailError(); else showEmailError();
+    });
 
     function coreRow() {
       const fd = new FormData(form);
@@ -261,17 +284,19 @@
     }
 
     form.addEventListener("submit", async (e) => {
-      e.preventDefault(); // sem validação nativa
-      if (!mustFillOK()) { current = 0; showSection(current); alert("Preencha os campos obrigatórios da primeira etapa."); return; }
+      e.preventDefault();
+      // Valida e-mail antes de enviar; se inválido, volta pra 1ª tela e mostra exatamente o campo
+      if (!emailOK()) { current = 0; showSection(current); showEmailError(); return; }
 
       try {
         const row = coreRow();
         const { error } = await sb.from(TABLE).insert([row]);
         if (error) { console.error("[Supabase] Erro:", error); alert("Falha ao enviar: " + (error.message || "ver console")); return; }
 
-        openThanks();          // pop-up
-        form.reset();          // limpa
-        current = 0; showSection(current); // volta ao início
+        openThanks();
+        form.reset();
+        clearEmailError();
+        current = 0; showSection(current);
       } catch (err) {
         console.error("[Supabase] Exceção:", err);
         alert("Falha inesperada. Tente novamente.");
