@@ -23,9 +23,7 @@
     h2 { color: #e31937; margin-top: 0; }
     p.descricao { margin-top: -10px; margin-bottom: 20px; font-size: 14px; }
     label { display: block; margin-top: 20px; font-weight: bold; }
-    input, textarea, select {
-      width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px;
-    }
+    input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px; }
     textarea { resize: vertical; min-height: 80px; }
     .checkbox-group, .radio-group { margin-top: 10px; }
     .checkbox-group label, .radio-group label { font-weight: normal; }
@@ -197,7 +195,7 @@
     </div>
   </form>
 
-  <!-- Navegação entre seções (inalterado visualmente) -->
+  <!-- Navegação entre seções (mesmo visual) -->
   <script>
     const sections = document.querySelectorAll('.section');
     const nextBtn = document.querySelector('.btn-next');
@@ -216,34 +214,40 @@
     showSection(current);
   </script>
 
-  <!-- SDK UMD do Supabase (sem module/import) -->
+  <!-- Supabase (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <!-- Envio para o Supabase -->
+  <!-- Envio + Validação -->
   <script>
-    // Credenciais (front usa anon key)
     const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
     const TABLE = "respostas_formulario";
 
-    // Cliente Supabase (via UMD)
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
     const form = document.getElementById("formulario");
 
-    // uuid v4 (compat)
-    function uuidv4() {
-      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
-        const r = (Math.random() * 16) | 0, v = c === "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      });
+    // Garante que o submit SEMPRE dispara (vamos validar manualmente)
+    form.setAttribute('novalidate','');
+
+    function mustFillOK() {
+      // Campos realmente obrigatórios da primeira seção
+      const reqNames = ["empresa","responsavel","email","telefone","data"];
+      for (const n of reqNames) {
+        const el = form.querySelector(`[name="${n}"]`);
+        if (!el || !el.value || (el.type === "email" && !el.value.includes("@"))) {
+          // Mostra validação nativa do navegador
+          el && el.reportValidity && el.reportValidity();
+          // Volta para a primeira seção para o usuário ver
+          if (typeof showSection === "function") { current = 0; showSection(current); }
+          return false;
+        }
+      }
+      return true;
     }
 
-    function coreFields(formEl) {
-      const fd = new FormData(formEl);
+    function coreRow() {
+      const fd = new FormData(form);
       return {
-        id: uuidv4(), // garante id sempre
         empresa: (fd.get("empresa") || "").toString().trim() || null,
         responsavel: (fd.get("responsavel") || "").toString().trim() || null,
         email: (fd.get("email") || "").toString().trim() || null
@@ -251,27 +255,27 @@
     }
 
     form.addEventListener("submit", async (e) => {
-      e.preventDefault(); // controlamos o fluxo
-      try {
-        const row = coreFields(form);
-        if (!row.empresa && !row.responsavel && !row.email) {
-          alert("Preencha os campos iniciais antes de enviar.");
-          return;
-        }
+      e.preventDefault();
 
+      // 1) Validação dos obrigatórios (resolve o "clico e não acontece nada")
+      if (!mustFillOK()) return;
+
+      try {
+        // 2) Salva no Supabase
+        const row = coreRow();
         const { error } = await sb.from(TABLE).insert([row]);
+
         if (error) {
           console.error("[Supabase] Erro:", error);
           alert("Falha ao enviar: " + (error.message || "ver console"));
           return;
         }
 
+        // 3) Feedback e reset
         alert("Formulário enviado com sucesso!");
         form.reset();
         current = 0;
         if (typeof showSection === "function") showSection(current);
-        // Se preferir redirecionar:
-        // window.location.href = "/obrigado";
       } catch (err) {
         console.error("[Supabase] Exceção:", err);
         alert("Falha inesperada. Tente novamente.");
