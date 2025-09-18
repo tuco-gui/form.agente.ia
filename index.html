@@ -280,5 +280,56 @@
 
     showSection(current);
   </script>
+  <script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+  // === CREDENCIAIS (front-end: usar SEMPRE a anon key) ===
+  const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
+
+  // === NOME DA TABELA (exatamente como está no Supabase) ===
+  const TABLE = "respostas_formulario";
+
+  // Cria o client
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Pega seu formulário existente (id="formulario")
+  const form = document.getElementById("formulario");
+
+  // Helper para extrair só os campos que EXISTEM na tabela
+  function pickCoreFields(formEl) {
+    const fd = new FormData(formEl);
+    // Trim básico pra limpar espaços
+    const empresa = (fd.get("empresa") || "").toString().trim() || null;
+    const responsavel = (fd.get("responsavel") || "").toString().trim() || null;
+    const email = (fd.get("email") || "").toString().trim() || null;
+    return { empresa, responsavel, email };
+  }
+
+  // Listener adicional (não remove o seu; roda junto e não muda o UX)
+  form.addEventListener("submit", async function supabaseInsertHandler(evt) {
+    // NÃO cancelo o submit aqui. Seu listener já dá preventDefault e mostra o alert.
+    // Eu só insiro em background assim que o usuário clica em Enviar.
+    try {
+      const row = pickCoreFields(form);
+      // Validação bem leve pra evitar inserts vazios:
+      if (!row.empresa && !row.responsavel && !row.email) return;
+
+      const { error } = await supabase
+        .from(TABLE)
+        .insert([ row ]);
+
+      if (error) {
+        console.error("[Supabase] Erro ao inserir:", error);
+        // Mantém seu UX; só loga erro. Se quiser feedback visual depois, me fala.
+      } else {
+        console.log("[Supabase] Inserido com sucesso:", row);
+      }
+    } catch (e) {
+      console.error("[Supabase] Falha inesperada:", e);
+    }
+  });
+</script>
+
 </body>
 </html>
