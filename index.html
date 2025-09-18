@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,129 +7,110 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      background-color: #ffffff;
+      color: #000000;
+      margin: 0;
       padding: 20px;
     }
-    h1 {
-      text-align: center;
-      color: #003f5c;
-    }
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
+    .container {
       max-width: 700px;
       margin: 0 auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      border: 1px solid #f2f2f2;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      color: #E31937;
+      margin-bottom: 10px;
+    }
+    p.description {
+      color: #333;
+      margin-bottom: 25px;
     }
     label {
       display: block;
       margin-top: 20px;
       font-weight: bold;
     }
-    textarea, input[type="text"] {
+    input, select, textarea {
       width: 100%;
       padding: 10px;
-      margin-top: 8px;
+      margin-top: 5px;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 5px;
     }
-    button {
-      margin-top: 30px;
-      background-color: #f2a900;
+    .button-next {
+      background-color: #E31937;
       color: white;
-      padding: 15px;
+      padding: 12px 20px;
       border: none;
-      width: 100%;
+      border-radius: 5px;
+      margin-top: 30px;
       font-size: 16px;
-      border-radius: 6px;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #e69b00;
-    }
-    .section-title {
-      margin-top: 40px;
-      font-size: 18px;
-      color: #555;
-      border-bottom: 2px solid #f2a900;
-      padding-bottom: 5px;
+    .button-next:hover {
+      background-color: #c5112f;
     }
   </style>
 </head>
 <body>
-  <h1>Formulário de Briefing - Figueira Marketing</h1>
-  <form>
-    
-    <div class="section-title">1. Informações Básicas</div>
-    <label>Nome do responsável:</label>
-    <input type="text" name="nome" />
+  <div class="container">
+    <h2>Informações Básicas</h2>
+    <p class="description">Preencha abaixo os dados iniciais da sua empresa. Essas informações nos ajudarão a entender o contexto geral do seu negócio.</p>
 
-    <label>Cargo na empresa:</label>
-    <input type="text" name="cargo" />
+    <form id="form-figueira">
+      <label for="nome">Nome da empresa</label>
+      <input type="text" id="nome" name="nome" required />
 
-    <label>Nome da empresa:</label>
-    <input type="text" name="empresa" />
+      <label for="site">Site ou rede social principal</label>
+      <input type="url" id="site" name="site" placeholder="https://www.exemplo.com" />
 
-    <label>Instagram da empresa:</label>
-    <input type="text" name="instagram" />
+      <label for="cidade">Cidade</label>
+      <input type="text" id="cidade" name="cidade" required />
 
-    <label>Site da empresa (se houver):</label>
-    <input type="text" name="site" />
+      <label for="estado">Estado</label>
+      <select id="estado" name="estado" required>
+        <option value="">Selecione o estado</option>
+        <option value="AC">AC</option>
+        <option value="AL">AL</option>
+        <option value="AP">AP</option>
+        <option value="AM">AM</option>
+        <option value="BA">BA</option>
+        <option value="CE">CE</option>
+        <option value="DF">DF</option>
+        <option value="ES">ES</option>
+        <option value="GO">GO</option>
+        <option value="MA">MA</option>
+        <option value="MT">MT</option>
+        <option value="MS">MS</option>
+        <option value="MG">MG</option>
+        <option value="PA">PA</option>
+        <option value="PB">PB</option>
+        <option value="PR">PR</option>
+        <option value="PE">PE</option>
+        <option value="PI">PI</option>
+        <option value="RJ">RJ</option>
+        <option value="RN">RN</option>
+        <option value="RS">RS</option>
+        <option value="RO">RO</option>
+        <option value="RR">RR</option>
+        <option value="SC">SC</option>
+        <option value="SP">SP</option>
+        <option value="SE">SE</option>
+        <option value="TO">TO</option>
+      </select>
 
-    <label>Segmento de atuação:</label>
-    <input type="text" name="segmento" />
+      <button type="button" class="button-next" onclick="proximaSessao()">Próxima etapa</button>
+    </form>
+  </div>
 
-    <label>Cidade e Estado onde atua:</label>
-    <input type="text" name="local" />
-
-    <div class="section-title">2. Sobre o negócio</div>
-    <label>Conte um pouco sobre o seu negócio:</label>
-    <textarea name="sobre_negocio"></textarea>
-
-    <label>Qual o principal diferencial do seu negócio?</label>
-    <textarea name="diferencial"></textarea>
-
-    <label>Existe alguma característica da empresa ou produto que gostaria de destacar nas campanhas?</label>
-    <textarea name="caracteristicas"></textarea>
-
-    <div class="section-title">3. Objetivo do agente</div>
-    <label>Qual o principal objetivo da contratação da Figueira Marketing?</label>
-    <textarea name="objetivo"></textarea>
-
-    <label>Você já possui algum histórico com marketing ou tráfego pago? Se sim, conte como foi:</label>
-    <textarea name="historico_marketing"></textarea>
-
-    <div class="section-title">4. Público-alvo</div>
-    <label>Descreva o público ideal do seu produto ou serviço:</label>
-    <textarea name="publico_ideal"></textarea>
-
-    <label>Existe algum público que NÃO deseja atingir?</label>
-    <textarea name="publico_indesejado"></textarea>
-
-    <div class="section-title">5. Dor do cliente</div>
-    <label>O cliente ideal geralmente chega com qual dor ou problema?</label>
-    <textarea name="dor_cliente"></textarea>
-
-    <label>Quais são os maiores benefícios percebidos por quem já comprou?</label>
-    <textarea name="beneficios"></textarea>
-
-    <div class="section-title">6. Concorrência</div>
-    <label>Você conhece seus principais concorrentes? Quais são?</label>
-    <textarea name="concorrentes"></textarea>
-
-    <div class="section-title">7. Proposta e Promessa</div>
-    <label>Qual é a sua principal promessa ou transformação que entrega?</label>
-    <textarea name="promessa"></textarea>
-
-    <label>Há alguma frase de impacto ou slogan já utilizado?</label>
-    <textarea name="slogan"></textarea>
-
-    <div class="section-title">8. Considerações finais</div>
-    <label>Existe alguma informação adicional que devemos saber?</label>
-    <textarea name="extra"></textarea>
-
-    <button type="submit">Enviar formulário</button>
-  </form>
+  <script>
+    function proximaSessao() {
+      alert("Aqui entrará a próxima sessão: 'Sobre o negócio'");
+      // Quando você me disser, eu substituo esse alert pela próxima seção do formulário.
+    }
+  </script>
 </body>
 </html>
