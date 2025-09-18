@@ -1,144 +1,284 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Formulário Figueira Marketing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulário Agente de IA | Figueira Marketing</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #000000;
+      background-color: #f7f4ed;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      color: #000;
     }
     .container {
-      max-width: 700px;
-      margin: 0 auto;
+      max-width: 800px;
+      margin: 50px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
       padding: 30px;
-      border: 1px solid #f2f2f2;
-      border-radius: 8px;
-      background-color: #f9f9f9;
     }
     h2 {
-      color: #E31937;
-      margin-bottom: 10px;
+      color: #e31937;
+      margin-top: 0;
     }
-    p.description {
-      color: #333;
-      margin-bottom: 25px;
+    p.descricao {
+      margin-top: -10px;
+      margin-bottom: 20px;
+      font-size: 14px;
     }
     label {
       display: block;
       margin-top: 20px;
       font-weight: bold;
     }
-    input, select, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 5px;
+      margin-top: 5px;
     }
-    .button-next {
-      background-color: #E31937;
-      color: white;
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .checkbox-group, .radio-group {
+      margin-top: 10px;
+    }
+    .checkbox-group label,
+    .radio-group label {
+      font-weight: normal;
+    }
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .btn {
       padding: 12px 20px;
       border: none;
       border-radius: 5px;
-      margin-top: 30px;
-      font-size: 16px;
+      color: #fff;
       cursor: pointer;
     }
-    .button-next:hover {
-      background-color: #c5112f;
+    .btn-next {
+      background-color: #e31937;
     }
-    .hidden {
-      display: none;
+    .btn-prev {
+      background-color: #003f5c;
+    }
+    .btn-submit {
+      background-color: #f2a900;
+      margin-left: auto;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Etapa 1 -->
-    <div id="step-1">
-      <h2>Informações Básicas</h2>
-      <p class="description">Preencha abaixo os dados iniciais da sua empresa. Essas informações nos ajudarão a entender o contexto geral do seu negócio.</p>
-      <label for="nome">Nome da empresa</label>
-      <input type="text" id="nome" name="nome" required />
-      <label for="site">Site ou rede social principal</label>
-      <input type="url" id="site" name="site" placeholder="https://www.exemplo.com" />
-      <label for="cidade">Cidade</label>
-      <input type="text" id="cidade" name="cidade" required />
-      <label for="estado">Estado</label>
-      <select id="estado" name="estado" required>
-        <option value="">Selecione o estado</option>
-        <option value="SP">SP</option>
-        <option value="RJ">RJ</option>
-        <option value="MG">MG</option>
-        <option value="PR">PR</option>
-        <option value="RS">RS</option>
-        <option value="BA">BA</option>
-        <!-- outros estados -->
+  <form class="container" id="formulario">
+    <h1>🧠 Formulário de Coleta – Agente de IA | Figueira Marketing</h1>
+    <p class="descricao">Conectando propósito à performance.<br>Preencha com atenção — quanto mais completo, mais assertivo será o agente.</p>
+
+    <!-- Seções (apenas 1 ativa por vez) -->
+    <div class="section active">
+      <h2>🔰 Identificação</h2>
+      <label>Nome da empresa:</label>
+      <input type="text" name="empresa" required>
+
+      <label>Responsável pelo projeto:</label>
+      <input type="text" name="responsavel" required>
+
+      <label>E-mail de contato:</label>
+      <input type="email" name="email" required>
+
+      <label>Telefone / WhatsApp:</label>
+      <input type="tel" name="telefone" required>
+
+      <label>Data de preenchimento:</label>
+      <input type="date" name="data" required>
+    </div>
+
+    <div class="section">
+      <h2>🌱 Sobre o Negócio</h2>
+      <label>Setor de atuação:</label>
+      <input type="text" name="setor">
+
+      <label>Produtos ou serviços oferecidos:</label>
+      <textarea name="produtos"></textarea>
+
+      <label>Público-alvo:</label>
+      <textarea name="publico"></textarea>
+
+      <label>Tem site ou landing page?</label>
+      <input type="url" name="site">
+    </div>
+
+    <div class="section">
+      <h2>✨ Objetivo do Agente</h2>
+      <label>O que o agente deve resolver?</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="objetivo" value="Atendimento de dúvidas"> Atendimento de dúvidas</label>
+        <label><input type="checkbox" name="objetivo" value="Agendamento/Reservas"> Agendamento/Reservas</label>
+        <label><input type="checkbox" name="objetivo" value="Captar leads"> Captar leads</label>
+        <label><input type="checkbox" name="objetivo" value="Suporte técnico"> Suporte técnico</label>
+        <label><input type="checkbox" name="objetivo" value="Direcionar para canais"> Direcionar para canais</label>
+        <label><input type="checkbox" name="objetivo" value="Outro"> Outro:</label>
+        <input type="text" name="objetivoOutro">
+      </div>
+
+      <label>O que o agente NÃO pode fazer?</label>
+      <textarea name="naoPode"></textarea>
+    </div>
+
+    <div class="section">
+      <h2>❓ Perguntas Frequentes</h2>
+      <p>Liste até 10 dúvidas reais que seus clientes costumam ter:</p>
+      <div id="faq-list">
+        <input type="text" name="faq1" placeholder="1." />
+        <input type="text" name="faq2" placeholder="2." />
+        <input type="text" name="faq3" placeholder="3." />
+        <input type="text" name="faq4" placeholder="4." />
+        <input type="text" name="faq5" placeholder="5." />
+        <input type="text" name="faq6" placeholder="6." />
+        <input type="text" name="faq7" placeholder="7." />
+        <input type="text" name="faq8" placeholder="8." />
+        <input type="text" name="faq9" placeholder="9." />
+        <input type="text" name="faq10" placeholder="10." />
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🧱 Informações Fixas</h2>
+      <label>Endereço completo:</label>
+      <textarea name="endereco"></textarea>
+
+      <label>Horários de funcionamento:</label>
+      <textarea name="horario"></textarea>
+
+      <label>Formas de pagamento aceitas:</label>
+      <textarea name="pagamento"></textarea>
+
+      <label>Política de reagendamento ou cancelamento:</label>
+      <textarea name="politica"></textarea>
+
+      <label>Prazo médio de entrega ou execução:</label>
+      <textarea name="prazo"></textarea>
+
+      <label>Outros dados importantes:</label>
+      <textarea name="outros"></textarea>
+    </div>
+
+    <div class="section">
+      <h2>📣 Tom de Voz do Atendimento</h2>
+      <label>Selecione o estilo desejado:</label>
+      <div class="radio-group">
+        <label><input type="radio" name="tom" value="Formal e técnico"> Formal e técnico</label>
+        <label><input type="radio" name="tom" value="Educado e objetivo"> Educado e objetivo</label>
+        <label><input type="radio" name="tom" value="Informal e amigável"> Informal e amigável</label>
+        <label><input type="radio" name="tom" value="Carismático e criativo"> Carismático e criativo</label>
+        <label><input type="radio" name="tom" value="Outro"> Outro:</label>
+        <input type="text" name="tomOutro">
+      </div>
+
+      <label>O agente deve ter tom cristão/ético (sem urgência falsa)?</label>
+      <select name="tomCristao">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
       </select>
-      <button type="button" class="button-next" onclick="nextStep(1)">Próxima etapa</button>
     </div>
 
-    <!-- Etapa 2 -->
-    <div id="step-2" class="hidden">
-      <h2>Sobre o Negócio</h2>
-      <p class="description">Conte um pouco sobre a sua empresa e sua atuação no mercado.</p>
-      <label for="segmento">Segmento da empresa</label>
-      <input type="text" id="segmento" name="segmento" />
-      <label for="tempo">Tempo de atuação</label>
-      <input type="text" id="tempo" name="tempo" placeholder="Ex: 3 anos" />
-      <label for="descricao">Breve descrição da empresa</label>
-      <textarea id="descricao" name="descricao" rows="4"></textarea>
-      <button type="button" class="button-next" onclick="nextStep(2)">Próxima etapa</button>
+    <div class="section">
+      <h2>🚩 Restrições e Cuidados</h2>
+      <label>Informações que o agente NÃO pode divulgar:</label>
+      <textarea name="restricoes"></textarea>
+
+      <label>Erros inaceitáveis:</label>
+      <textarea name="erros"></textarea>
+
+      <label>O que não pode faltar de jeito nenhum:</label>
+      <textarea name="essencial"></textarea>
     </div>
 
-    <!-- Etapa 3 -->
-    <div id="step-3" class="hidden">
-      <h2>Objetivos</h2>
-      <p class="description">Quais são os objetivos da empresa ao contratar marketing?</p>
-      <label for="objetivos">Objetivos principais</label>
-      <textarea id="objetivos" name="objetivos" rows="4"></textarea>
-      <button type="button" class="button-next" onclick="nextStep(3)">Próxima etapa</button>
+    <div class="section">
+      <h2>🔗 Links e Integrações</h2>
+      <label>Link do WhatsApp com UTM (se houver):</label>
+      <input type="url" name="whatsapp">
+
+      <label>Link de CRM:</label>
+      <input type="url" name="crm">
+
+      <label>Link de agendamento online:</label>
+      <input type="url" name="agendamento">
+
+      <label>Outras ferramentas:</label>
+      <textarea name="ferramentas"></textarea>
     </div>
 
-    <!-- Etapa 4 -->
-    <div id="step-4" class="hidden">
-      <h2>Público-Alvo</h2>
-      <p class="description">Quem são os seus clientes ideais?</p>
-      <label for="publico">Descreva seu público-alvo</label>
-      <textarea id="publico" name="publico" rows="4"></textarea>
-      <button type="button" class="button-next" onclick="nextStep(4)">Próxima etapa</button>
+    <div class="section">
+      <h2>📎 Anexos</h2>
+      <label>Link ou descrição dos logotipos:</label>
+      <textarea name="logos"></textarea>
+
+      <label>Outros materiais de apoio:</label>
+      <textarea name="materiais"></textarea>
     </div>
 
-    <!-- Etapa 5 -->
-    <div id="step-5" class="hidden">
-      <h2>Dores do Cliente</h2>
-      <p class="description">Quais os principais problemas e dores que seu cliente enfrenta?</p>
-      <label for="dores">Liste as principais dores</label>
-      <textarea id="dores" name="dores" rows="4"></textarea>
-      <button type="button" class="button-next" onclick="nextStep(5)">Próxima etapa</button>
+    <div class="section">
+      <h2>📌 Observações Finais</h2>
+      <label>Observações adicionais:</label>
+      <textarea name="obs"></textarea>
     </div>
 
-    <!-- Etapa 6 -->
-    <div id="step-6" class="hidden">
-      <h2>Proposta de Valor</h2>
-      <p class="description">O que torna seu negócio único?</p>
-      <label for="valor">Diferenciais e proposta de valor</label>
-      <textarea id="valor" name="valor" rows="4"></textarea>
-      <button type="submit" class="button-next">Enviar</button>
+    <div class="buttons">
+      <button type="button" class="btn btn-prev" onclick="prevSection()">Voltar</button>
+      <button type="button" class="btn btn-next" onclick="nextSection()">Próxima etapa</button>
+      <button type="submit" class="btn btn-submit" style="display: none;">Enviar</button>
     </div>
-  </div>
+  </form>
 
   <script>
-    function nextStep(currentStep) {
-      document.getElementById(`step-${currentStep}`).classList.add("hidden");
-      document.getElementById(`step-${currentStep + 1}`).classList.remove("hidden");
+    const sections = document.querySelectorAll('.section');
+    const nextBtn = document.querySelector('.btn-next');
+    const prevBtn = document.querySelector('.btn-prev');
+    const submitBtn = document.querySelector('.btn-submit');
+    let current = 0;
+
+    function showSection(index) {
+      sections.forEach((section, i) => section.classList.toggle('active', i === index));
+      prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
+      nextBtn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
+      submitBtn.style.display = index === sections.length - 1 ? 'inline-block' : 'none';
     }
+
+    function nextSection() {
+      if (current < sections.length - 1) {
+        current++;
+        showSection(current);
+      }
+    }
+
+    function prevSection() {
+      if (current > 0) {
+        current--;
+        showSection(current);
+      }
+    }
+
+    document.getElementById('formulario').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Formulário enviado com sucesso!');
+    });
+
+    showSection(current);
   </script>
 </body>
 </html>
