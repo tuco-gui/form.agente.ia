@@ -1,115 +1,135 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Figueira Marketing</title>
+  <title>Formulário Figueira Marketing</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #ffffff;
-      color: #1a1a1a;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
     }
-    header {
-      background-color: #E31937; /* Vermelho */
-      color: white;
-      padding: 2rem 1rem;
+    h1 {
       text-align: center;
+      color: #003f5c;
     }
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-    header p {
-      font-size: 1.1rem;
-      margin-top: 0.5rem;
-    }
-    section {
-      padding: 2rem 1rem;
-      max-width: 800px;
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 700px;
       margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .section-title {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      color: #E31937;
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
     }
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-    .feature {
-      flex: 1 1 45%;
-      background-color: #f5f5f5;
-      border-left: 4px solid #E31937;
-      padding: 1rem;
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
       border-radius: 6px;
     }
-    .cta {
-      margin-top: 3rem;
-      text-align: center;
+    button {
+      margin-top: 30px;
+      background-color: #f2a900;
+      color: white;
+      padding: 15px;
+      border: none;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    .cta a {
-      display: inline-block;
-      background-color: #000000;
-      color: #ffffff;
-      padding: 1rem 2rem;
-      font-weight: bold;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
+    button:hover {
+      background-color: #e69b00;
     }
-    .cta a:hover {
-      background-color: #333333;
-    }
-    footer {
-      background-color: #f2f2f2;
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #666;
+    .section-title {
+      margin-top: 40px;
+      font-size: 18px;
+      color: #555;
+      border-bottom: 2px solid #f2a900;
+      padding-bottom: 5px;
     }
   </style>
 </head>
 <body>
+  <h1>Formulário de Briefing - Figueira Marketing</h1>
+  <form>
+    
+    <div class="section-title">1. Informações Básicas</div>
+    <label>Nome do responsável:</label>
+    <input type="text" name="nome" />
 
-  <header>
-    <h1>Figueira Marketing</h1>
-    <p>Fazemos sua marca crescer como uma figueira: com raízes fortes e frutos duradouros.</p>
-  </header>
+    <label>Cargo na empresa:</label>
+    <input type="text" name="cargo" />
 
-  <section>
-    <h2 class="section-title">O que entregamos:</h2>
-    <div class="features">
-      <div class="feature">
-        <h3>Marketing Estratégico</h3>
-        <p>Diagnóstico completo e plano de ação sob medida para gerar crescimento real.</p>
-      </div>
-      <div class="feature">
-        <h3>Identidade Visual</h3>
-        <p>Do logotipo ao site — tudo com coerência, impacto e posicionamento.</p>
-      </div>
-      <div class="feature">
-        <h3>Performance Digital</h3>
-        <p>Gestão de tráfego, criativos, landing pages e conversões.</p>
-      </div>
-      <div class="feature">
-        <h3>Consultoria sob demanda</h3>
-        <p>Você no comando, com nossa orientação para escalar com segurança.</p>
-      </div>
-    </div>
+    <label>Nome da empresa:</label>
+    <input type="text" name="empresa" />
 
-    <div class="cta">
-      <a href="https://wa.me/55SEUNUMERO" target="_blank">Falar com um especialista</a>
-    </div>
-  </section>
+    <label>Instagram da empresa:</label>
+    <input type="text" name="instagram" />
 
-  <footer>
-    &copy; 2025 Figueira Marketing. Todos os direitos reservados.
-  </footer>
+    <label>Site da empresa (se houver):</label>
+    <input type="text" name="site" />
 
+    <label>Segmento de atuação:</label>
+    <input type="text" name="segmento" />
+
+    <label>Cidade e Estado onde atua:</label>
+    <input type="text" name="local" />
+
+    <div class="section-title">2. Sobre o negócio</div>
+    <label>Conte um pouco sobre o seu negócio:</label>
+    <textarea name="sobre_negocio"></textarea>
+
+    <label>Qual o principal diferencial do seu negócio?</label>
+    <textarea name="diferencial"></textarea>
+
+    <label>Existe alguma característica da empresa ou produto que gostaria de destacar nas campanhas?</label>
+    <textarea name="caracteristicas"></textarea>
+
+    <div class="section-title">3. Objetivo do agente</div>
+    <label>Qual o principal objetivo da contratação da Figueira Marketing?</label>
+    <textarea name="objetivo"></textarea>
+
+    <label>Você já possui algum histórico com marketing ou tráfego pago? Se sim, conte como foi:</label>
+    <textarea name="historico_marketing"></textarea>
+
+    <div class="section-title">4. Público-alvo</div>
+    <label>Descreva o público ideal do seu produto ou serviço:</label>
+    <textarea name="publico_ideal"></textarea>
+
+    <label>Existe algum público que NÃO deseja atingir?</label>
+    <textarea name="publico_indesejado"></textarea>
+
+    <div class="section-title">5. Dor do cliente</div>
+    <label>O cliente ideal geralmente chega com qual dor ou problema?</label>
+    <textarea name="dor_cliente"></textarea>
+
+    <label>Quais são os maiores benefícios percebidos por quem já comprou?</label>
+    <textarea name="beneficios"></textarea>
+
+    <div class="section-title">6. Concorrência</div>
+    <label>Você conhece seus principais concorrentes? Quais são?</label>
+    <textarea name="concorrentes"></textarea>
+
+    <div class="section-title">7. Proposta e Promessa</div>
+    <label>Qual é a sua principal promessa ou transformação que entrega?</label>
+    <textarea name="promessa"></textarea>
+
+    <label>Há alguma frase de impacto ou slogan já utilizado?</label>
+    <textarea name="slogan"></textarea>
+
+    <div class="section-title">8. Considerações finais</div>
+    <label>Existe alguma informação adicional que devemos saber?</label>
+    <textarea name="extra"></textarea>
+
+    <button type="submit">Enviar formulário</button>
+  </form>
 </body>
 </html>
