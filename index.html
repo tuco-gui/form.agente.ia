@@ -5,21 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Formulário Agente de IA | Figueira Marketing</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f7f4ed;
-      margin: 0;
-      padding: 0;
-      color: #000;
-    }
-    .container {
-      max-width: 800px;
-      margin: 50px auto;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-    }
+    body { font-family: Arial, sans-serif; background-color: #f7f4ed; margin: 0; padding: 0; color: #000; }
+    .container { max-width: 800px; margin: 50px auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,.1); padding: 30px; }
     h2 { color: #e31937; margin-top: 0; }
     p.descricao { margin-top: -10px; margin-bottom: 20px; font-size: 14px; }
     label { display: block; margin-top: 20px; font-weight: bold; }
@@ -35,15 +22,9 @@
     .btn-prev { background-color: #003f5c; }
     .btn-submit { background-color: #f2a900; margin-left: auto; }
 
-    /* --- POP-UP "Obrigado" (sem mexer no layout do form) --- */
-    .modal-backdrop {
-      position: fixed; inset: 0; background: rgba(0,0,0,.45);
-      display: none; align-items: center; justify-content: center; z-index: 9999;
-    }
-    .modal-card {
-      background: #fff; width: 90%; max-width: 560px; border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.2); padding: 28px;
-    }
+    /* Pop-up Obrigado */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; z-index: 9999; }
+    .modal-card { background: #fff; width: 90%; max-width: 560px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.2); padding: 28px; }
     .modal-card h3 { margin: 0 0 8px; color: #e31937; }
     .modal-card p { margin: 0 0 16px; }
     .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px; }
@@ -52,7 +33,8 @@
   </style>
 </head>
 <body>
-  <form class="container" id="formulario">
+  <!-- novalidate resolve o erro “not focusable” dos campos escondidos -->
+  <form class="container" id="formulario" novalidate>
     <h1>🧠 Formulário de Coleta – Agente de IA | Figueira Marketing</h1>
     <p class="descricao">Conectando propósito à performance.<br>Preencha com atenção — quanto mais completo, mais assertivo será o agente.</p>
 
@@ -210,7 +192,7 @@
     </div>
   </form>
 
-  <!-- POP-UP Obrigado -->
+  <!-- Pop-up Obrigado -->
   <div class="modal-backdrop" id="thanksModal">
     <div class="modal-card">
       <h3>✅ Obrigado!</h3>
@@ -221,7 +203,7 @@
     </div>
   </div>
 
-  <!-- Navegação entre seções (visual intacto) -->
+  <!-- Navegação entre seções (mesmo visual) -->
   <script>
     const sections = document.querySelectorAll('.section');
     const nextBtn = document.querySelector('.btn-next');
@@ -239,21 +221,15 @@
     function prevSection() { if (current > 0) { current--; showSection(current); } }
     showSection(current);
 
-    function openThanks() {
-      const m = document.getElementById('thanksModal');
-      if (m) m.style.display = 'flex';
-    }
-    function closeThanks() {
-      const m = document.getElementById('thanksModal');
-      if (m) m.style.display = 'none';
-    }
-    window.closeThanks = closeThanks; // para o botão do pop-up
+    function openThanks() { const m = document.getElementById('thanksModal'); if (m) m.style.display = 'flex'; }
+    function closeThanks() { const m = document.getElementById('thanksModal'); if (m) m.style.display = 'none'; }
+    window.closeThanks = closeThanks;
   </script>
 
   <!-- Supabase (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <!-- Envio + Insert com UUID + Pop-up -->
+  <!-- Envio para Supabase com validação manual -->
   <script>
     const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
@@ -262,25 +238,15 @@
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const form = document.getElementById("formulario");
 
-    // uuid v4 para garantir ID mesmo se a tabela não tiver default
-    function uuidv4() {
-      if (crypto && crypto.randomUUID) return crypto.randomUUID();
-      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
-        const r = (Math.random() * 16) | 0, v = c === "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      });
-    }
-
-    // Validação manual dos obrigatórios (evita "cliquei e nada")
+    // validação manual só dos obrigatórios
     function mustFillOK() {
-      const reqNames = ["empresa","responsavel","email","telefone","data"];
-      for (const n of reqNames) {
-        const el = form.querySelector(`[name="${n}"]`);
-        if (!el || !el.value || (el.type === "email" && !el.value.includes("@"))) {
-          el && el.reportValidity && el.reportValidity();
-          current = 0; showSection(current);
-          return false;
-        }
+      const req = ["empresa","responsavel","email","telefone","data"];
+      for (const name of req) {
+        const el = form.querySelector(`[name="${name}"]`);
+        if (!el) return false;
+        const val = (el.value || "").trim();
+        if (!val) { el.focus(); return false; }
+        if (name === "email" && !val.includes("@")) { el.focus(); return false; }
       }
       return true;
     }
@@ -288,7 +254,6 @@
     function coreRow() {
       const fd = new FormData(form);
       return {
-        id: uuidv4(),
         empresa: (fd.get("empresa") || "").toString().trim() || null,
         responsavel: (fd.get("responsavel") || "").toString().trim() || null,
         email: (fd.get("email") || "").toString().trim() || null
@@ -296,26 +261,17 @@
     }
 
     form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!mustFillOK()) return;
+      e.preventDefault(); // sem validação nativa
+      if (!mustFillOK()) { current = 0; showSection(current); alert("Preencha os campos obrigatórios da primeira etapa."); return; }
 
       try {
         const row = coreRow();
         const { error } = await sb.from(TABLE).insert([row]);
+        if (error) { console.error("[Supabase] Erro:", error); alert("Falha ao enviar: " + (error.message || "ver console")); return; }
 
-        if (error) {
-          console.error("[Supabase] Erro:", error);
-          alert("Falha ao enviar: " + (error.message || "ver console"));
-          return;
-        }
-
-        // Sucesso: abre pop-up, reseta e volta ao início
-        openThanks();
-        form.reset();
-        current = 0; showSection(current);
-
-        // Se preferir redirecionar para /obrigado, descomente:
-        // window.location.href = "/obrigado";
+        openThanks();          // pop-up
+        form.reset();          // limpa
+        current = 0; showSection(current); // volta ao início
       } catch (err) {
         console.error("[Supabase] Exceção:", err);
         alert("Falha inesperada. Tente novamente.");
@@ -324,4 +280,3 @@
   </script>
 </body>
 </html>
-
