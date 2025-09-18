@@ -31,13 +31,13 @@
     .btn-ok { background: #f2a900; color: #fff; border: 0; border-radius: 6px; padding: 10px 16px; cursor: pointer; }
     .btn-ok:hover { filter: brightness(0.95); }
 
-    /* Mensagens de erro em linha */
+    /* Erros em linha na 1ª tela */
     .field-error { color: #e31937; font-size: 12px; margin-top: 6px; display: none; }
     .has-error { border-color: #e31937 !important; }
   </style>
 </head>
 <body>
-  <!-- Sem validação nativa; validamos só o e-mail no JS -->
+  <!-- novalidate: sem validação nativa (evita erro de campos ocultos) -->
   <form class="container" id="formulario" novalidate>
     <h1>🧠 Formulário de Coleta – Agente de IA | Figueira Marketing</h1>
     <p class="descricao">Conectando propósito à performance.<br>Preencha com atenção — quanto mais completo, mais assertivo será o agente.</p>
@@ -53,10 +53,11 @@
 
       <label>E-mail de contato:</label>
       <input type="email" name="email" id="email">
-      <div id="err-email" class="field-error">Corrija o campo <strong>E-mail</strong>. Use um formato válido: exemplo@dominio.com.</div>
+      <div id="err-email" class="field-error">Corrija o campo <strong>E-mail</strong>. Use um formato válido (ex.: exemplo@dominio.com).</div>
 
       <label>Telefone / WhatsApp:</label>
-      <input type="tel" name="telefone">
+      <input type="tel" name="telefone" id="telefone" placeholder="(DD) 9XXXX-XXXX">
+      <div id="err-telefone" class="field-error">Corrija o campo <strong>Telefone/WhatsApp</strong>. Informe DDD + número (10 ou 11 dígitos).</div>
 
       <label>Data de preenchimento:</label>
       <input type="date" name="data">
@@ -208,12 +209,16 @@
     </div>
   </div>
 
-  <!-- Navegação entre seções -->
+  <!-- Navegação + Validação 1ª tela -->
   <script>
     const sections = document.querySelectorAll('.section');
     const nextBtn = document.querySelector('.btn-next');
     const prevBtn = document.querySelector('.btn-prev');
     const submitBtn = document.querySelector('.btn-submit');
+    const emailInput = document.getElementById('email');
+    const telInput = document.getElementById('telefone');
+    const emailErr = document.getElementById('err-email');
+    const telErr = document.getElementById('err-telefone');
     let current = 0;
 
     function showSection(index) {
@@ -222,23 +227,61 @@
       nextBtn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
       submitBtn.style.display = index === sections.length - 1 ? 'inline-block' : 'none';
     }
+
+    function isEmailValid(v) {
+      if (!v) return true; // vazio é permitido
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(v);
+    }
+    function isTelefoneValid(v) {
+      if (!v) return true; // vazio é permitido
+      const digits = v.replace(/\D/g, '');
+      return digits.length === 10 || digits.length === 11; // fixo (10) ou celular (11)
+    }
+
+    function showEmailError() { emailErr.style.display = 'block'; emailInput.classList.add('has-error'); }
+    function clearEmailError() { emailErr.style.display = 'none'; emailInput.classList.remove('has-error'); }
+    function showTelError()    { telErr.style.display = 'block';  telInput.classList.add('has-error'); }
+    function clearTelError()   { telErr.style.display = 'none';   telInput.classList.remove('has-error'); }
+
+    // Feedback em tempo real (1ª tela)
+    emailInput.addEventListener('input', () => { isEmailValid(emailInput.value.trim()) ? clearEmailError() : showEmailError(); });
+    emailInput.addEventListener('blur',  () => { isEmailValid(emailInput.value.trim()) ? clearEmailError() : showEmailError(); });
+    telInput.addEventListener('input',   () => { isTelefoneValid(telInput.value.trim()) ? clearTelError() : showTelError(); });
+    telInput.addEventListener('blur',    () => { isTelefoneValid(telInput.value.trim()) ? clearTelError() : showTelError(); });
+
+    // Valida 1ª tela e mantém o usuário nela se houver erro
+    function validateFirstScreen() {
+      const ev = isEmailValid(emailInput.value.trim());
+      const tv = isTelefoneValid(telInput.value.trim());
+      if (!ev) showEmailError(); else clearEmailError();
+      if (!tv) showTelError(); else clearTelError();
+      if (!ev || !tv) {
+        current = 0;
+        showSection(current);
+        ( !ev ? emailInput : telInput ).focus();
+        return false;
+      }
+      return true;
+    }
+
     function nextSection() {
-      // Se e-mail da 1ª tela estiver inválido, mostra erro e não avança
-      if (current === 0 && !emailOK()) { showEmailError(); return; }
+      if (current === 0 && !validateFirstScreen()) return; // trava aqui se houver erro
       if (current < sections.length - 1) { current++; showSection(current); }
     }
     function prevSection() { if (current > 0) { current--; showSection(current); } }
-    showSection(current);
 
     function openThanks() { const m = document.getElementById('thanksModal'); if (m) m.style.display = 'flex'; }
     function closeThanks() { const m = document.getElementById('thanksModal'); if (m) m.style.display = 'none'; }
     window.closeThanks = closeThanks;
+
+    showSection(current);
   </script>
 
   <!-- Supabase (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-  <!-- Envio para Supabase + validação de e-mail com mensagem específica -->
+  <!-- Envio para Supabase -->
   <script>
     const SUPABASE_URL = "https://wzeltidcqegclovfxayd.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
@@ -246,33 +289,6 @@
 
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const form = document.getElementById("formulario");
-    const emailInput = document.getElementById("email");
-    const emailErr = document.getElementById("err-email");
-
-    // Validação de e-mail (não obrigatório; só valida se tiver conteúdo)
-    function emailOK() {
-      const v = (emailInput.value || "").trim();
-      if (!v) return true; // vazio é permitido
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(v);
-    }
-    function showEmailError() {
-      emailErr.style.display = "block";
-      emailInput.classList.add("has-error");
-      emailInput.focus();
-    }
-    function clearEmailError() {
-      emailErr.style.display = "none";
-      emailInput.classList.remove("has-error");
-    }
-
-    // Feedback em tempo real
-    emailInput.addEventListener("input", () => {
-      if (emailOK()) clearEmailError(); else showEmailError();
-    });
-    emailInput.addEventListener("blur", () => {
-      if (emailOK()) clearEmailError(); else showEmailError();
-    });
 
     function coreRow() {
       const fd = new FormData(form);
@@ -285,8 +301,8 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      // Valida e-mail antes de enviar; se inválido, volta pra 1ª tela e mostra exatamente o campo
-      if (!emailOK()) { current = 0; showSection(current); showEmailError(); return; }
+      // Valida 1ª tela antes de enviar
+      if (!validateFirstScreen()) return;
 
       try {
         const row = coreRow();
@@ -295,7 +311,13 @@
 
         openThanks();
         form.reset();
-        clearEmailError();
+        // limpa erros visuais
+        (document.getElementById('err-email')||{}).style.display = 'none';
+        (document.getElementById('err-telefone')||{}).style.display = 'none';
+        document.getElementById('email').classList.remove('has-error');
+        document.getElementById('telefone').classList.remove('has-error');
+
+        // volta à 1ª tela
         current = 0; showSection(current);
       } catch (err) {
         console.error("[Supabase] Exceção:", err);
@@ -305,3 +327,4 @@
   </script>
 </body>
 </html>
+
