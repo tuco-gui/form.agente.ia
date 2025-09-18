@@ -87,11 +87,157 @@
     <h1>🧠 Formulário de Coleta – Agente de IA | Figueira Marketing</h1>
     <p class="descricao">Conectando propósito à performance.<br>Preencha com atenção — quanto mais completo, mais assertivo será o agente.</p>
 
-    <!-- TODAS AS SEÇÕES -->
-    <!-- MANTIDO IGUAL AO SEU HTML FINAL -->
-    <!-- ... (COLAR AQUI TODAS AS DIVs .section DO FORMULÁRIO QUE JÁ ESTÃO ACIMA) -->
+    <!-- Seções (apenas 1 ativa por vez) -->
+    <div class="section active">
+      <h2>🔰 Identificação</h2>
+      <label>Nome da empresa:</label>
+      <input type="text" name="empresa" required>
 
-    <!-- Botões de navegação -->
+      <label>Responsável pelo projeto:</label>
+      <input type="text" name="responsavel" required>
+
+      <label>E-mail de contato:</label>
+      <input type="email" name="email" required>
+
+      <label>Telefone / WhatsApp:</label>
+      <input type="tel" name="telefone" required>
+
+      <label>Data de preenchimento:</label>
+      <input type="date" name="data" required>
+    </div>
+
+    <div class="section">
+      <h2>🌱 Sobre o Negócio</h2>
+      <label>Setor de atuação:</label>
+      <input type="text" name="setor">
+
+      <label>Produtos ou serviços oferecidos:</label>
+      <textarea name="produtos"></textarea>
+
+      <label>Público-alvo:</label>
+      <textarea name="publico"></textarea>
+
+      <label>Tem site ou landing page?</label>
+      <input type="url" name="site">
+    </div>
+
+    <div class="section">
+      <h2>✨ Objetivo do Agente</h2>
+      <label>O que o agente deve resolver?</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="objetivo" value="Atendimento de dúvidas"> Atendimento de dúvidas</label>
+        <label><input type="checkbox" name="objetivo" value="Agendamento/Reservas"> Agendamento/Reservas</label>
+        <label><input type="checkbox" name="objetivo" value="Captar leads"> Captar leads</label>
+        <label><input type="checkbox" name="objetivo" value="Suporte técnico"> Suporte técnico</label>
+        <label><input type="checkbox" name="objetivo" value="Direcionar para canais"> Direcionar para canais</label>
+        <label><input type="checkbox" name="objetivo" value="Outro"> Outro:</label>
+        <input type="text" name="objetivoOutro">
+      </div>
+
+      <label>O que o agente NÃO pode fazer?</label>
+      <textarea name="naoPode"></textarea>
+    </div>
+
+    <div class="section">
+      <h2>❓ Perguntas Frequentes</h2>
+      <p>Liste até 10 dúvidas reais que seus clientes costumam ter:</p>
+      <div id="faq-list">
+        <input type="text" name="faq1" placeholder="1." />
+        <input type="text" name="faq2" placeholder="2." />
+        <input type="text" name="faq3" placeholder="3." />
+        <input type="text" name="faq4" placeholder="4." />
+        <input type="text" name="faq5" placeholder="5." />
+        <input type="text" name="faq6" placeholder="6." />
+        <input type="text" name="faq7" placeholder="7." />
+        <input type="text" name="faq8" placeholder="8." />
+        <input type="text" name="faq9" placeholder="9." />
+        <input type="text" name="faq10" placeholder="10." />
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🧱 Informações Fixas</h2>
+      <label>Endereço completo:</label>
+      <textarea name="endereco"></textarea>
+
+      <label>Horários de funcionamento:</label>
+      <textarea name="horario"></textarea>
+
+      <label>Formas de pagamento aceitas:</label>
+      <textarea name="pagamento"></textarea>
+
+      <label>Política de reagendamento ou cancelamento:</label>
+      <textarea name="politica"></textarea>
+
+      <label>Prazo médio de entrega ou execução:</label>
+      <textarea name="prazo"></textarea>
+
+      <label>Outros dados importantes:</label>
+      <textarea name="outros"></textarea>
+    </div>
+
+    <div class="section">
+      <h2>📣 Tom de Voz do Atendimento</h2>
+      <label>Selecione o estilo desejado:</label>
+      <div class="radio-group">
+        <label><input type="radio" name="tom" value="Formal e técnico"> Formal e técnico</label>
+        <label><input type="radio" name="tom" value="Educado e objetivo"> Educado e objetivo</label>
+        <label><input type="radio" name="tom" value="Informal e amigável"> Informal e amigável</label>
+        <label><input type="radio" name="tom" value="Carismático e criativo"> Carismático e criativo</label>
+        <label><input type="radio" name="tom" value="Outro"> Outro:</label>
+        <input type="text" name="tomOutro">
+      </div>
+
+      <label>O agente deve ter tom cristão/ético (sem urgência falsa)?</label>
+      <select name="tomCristao">
+        <option value="">Selecione</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+    </div>
+
+    <div class="section">
+      <h2>🚩 Restrições e Cuidados</h2>
+      <label>Informações que o agente NÃO pode divulgar:</label>
+      <textarea name="restricoes"></textarea>
+
+      <label>Erros inaceitáveis:</label>
+      <textarea name="erros"></textarea>
+
+      <label>O que não pode faltar de jeito nenhum:</label>
+      <textarea name="essencial"></textarea>
+    </div>
+
+    <div class="section">
+      <h2>🔗 Links e Integrações</h2>
+      <label>Link do WhatsApp com UTM (se houver):</label>
+      <input type="url" name="whatsapp">
+
+      <label>Link de CRM:</label>
+      <input type="url" name="crm">
+
+      <label>Link de agendamento online:</label>
+      <input type="url" name="agendamento">
+
+      <label>Outras ferramentas:</label>
+      <textarea name="ferramentas"></textarea>
+    </div>
+
+    <div class="section">
+      <h2>📎 Anexos</h2>
+      <label>Link ou descrição dos logotipos:</label>
+      <textarea name="logos"></textarea>
+
+      <label>Outros materiais de apoio:</label>
+      <textarea name="materiais"></textarea>
+    </div>
+
+    <div class="section">
+      <h2>📌 Observações Finais</h2>
+      <label>Observações adicionais:</label>
+      <textarea name="obs"></textarea>
+    </div>
+
     <div class="buttons">
       <button type="button" class="btn btn-prev" onclick="prevSection()">Voltar</button>
       <button type="button" class="btn btn-next" onclick="nextSection()">Próxima etapa</button>
@@ -99,7 +245,6 @@
     </div>
   </form>
 
-  <!-- Script de controle de etapas e envio para o Supabase -->
   <script>
     const sections = document.querySelectorAll('.section');
     const nextBtn = document.querySelector('.btn-next');
@@ -128,56 +273,12 @@
       }
     }
 
-    showSection(current);
-
-    const supabaseUrl = "https://wzeltidcqegclovfxayd.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI";
-    const tableName = "respostas"; // Nome da tabela no Supabase
-
-    document.getElementById('formulario').addEventListener('submit', async function(e) {
+    document.getElementById('formulario').addEventListener('submit', function(e) {
       e.preventDefault();
-
-      const form = e.target;
-      const formData = new FormData(form);
-      const data = {};
-
-      for (const [key, value] of formData.entries()) {
-        if (data[key]) {
-          if (Array.isArray(data[key])) {
-            data[key].push(value);
-          } else {
-            data[key] = [data[key], value];
-          }
-        } else {
-          data[key] = value;
-        }
-      }
-
-      try {
-        const response = await fetch(`${supabaseUrl}/rest/v1/${tableName}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
-            'Prefer': 'return=minimal'
-          },
-          body: JSON.stringify(data)
-        });
-
-        if (!response.ok) {
-          throw new Error("Erro ao enviar para Supabase: " + response.statusText);
-        }
-
-        alert('Formulário enviado com sucesso!');
-        form.reset();
-        current = 0;
-        showSection(current);
-      } catch (error) {
-        console.error("Erro ao enviar:", error);
-        alert('Erro ao enviar o formulário.');
-      }
+      alert('Formulário enviado com sucesso!');
     });
+
+    showSection(current);
   </script>
 </body>
 </html>
