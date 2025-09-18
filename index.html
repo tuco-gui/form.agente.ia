@@ -1,284 +1,181 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Formulário Agente de IA | Figueira Marketing</title>
+  <meta charset="UTF-8">
+  <title>Formulário Figueira Marketing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
       background-color: #f7f4ed;
-      margin: 0;
-      padding: 0;
       color: #000;
     }
-    .container {
+    header {
+      background-color: #003f5c;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    form {
+      padding: 20px;
       max-width: 800px;
-      margin: 50px auto;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-    }
-    h2 {
-      color: #e31937;
-      margin-top: 0;
-    }
-    p.descricao {
-      margin-top: -10px;
-      margin-bottom: 20px;
-      font-size: 14px;
+      margin: auto;
     }
     label {
       display: block;
-      margin-top: 20px;
+      margin-top: 15px;
       font-weight: bold;
     }
-    input, textarea, select {
+    input, select, textarea {
       width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
       margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
     }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    .checkbox-group, .radio-group {
-      margin-top: 10px;
-    }
-    .checkbox-group label,
-    .radio-group label {
-      font-weight: normal;
-    }
-    .section {
-      display: none;
-    }
-    .section.active {
-      display: block;
-    }
-    .buttons {
-      margin-top: 30px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 5px;
-      color: #fff;
-      cursor: pointer;
-    }
-    .btn-next {
-      background-color: #e31937;
-    }
-    .btn-prev {
-      background-color: #003f5c;
-    }
-    .btn-submit {
+    button {
+      margin-top: 25px;
       background-color: #f2a900;
-      margin-left: auto;
+      color: #000;
+      border: none;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 6px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #ddb000;
+    }
+    footer {
+      background-color: #003f5c;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
-  <form class="container" id="formulario">
-    <h1>🧠 Formulário de Coleta – Agente de IA | Figueira Marketing</h1>
-    <p class="descricao">Conectando propósito à performance.<br>Preencha com atenção — quanto mais completo, mais assertivo será o agente.</p>
 
-    <!-- Seções (apenas 1 ativa por vez) -->
-    <div class="section active">
-      <h2>🔰 Identificação</h2>
-      <label>Nome da empresa:</label>
-      <input type="text" name="empresa" required>
+<header>
+  <h1>Briefing Inteligente – Figueira Marketing</h1>
+  <p>Preencha todas as informações abaixo para criarmos seu agente inteligente personalizado.</p>
+</header>
 
-      <label>Responsável pelo projeto:</label>
-      <input type="text" name="responsavel" required>
+<form id="formulario">
 
-      <label>E-mail de contato:</label>
-      <input type="email" name="email" required>
+  <label>Empresa</label>
+  <input type="text" name="empresa" required>
 
-      <label>Telefone / WhatsApp:</label>
-      <input type="tel" name="telefone" required>
+  <label>Responsável</label>
+  <input type="text" name="responsavel" required>
 
-      <label>Data de preenchimento:</label>
-      <input type="date" name="data" required>
-    </div>
+  <label>Email</label>
+  <input type="email" name="email" required>
 
-    <div class="section">
-      <h2>🌱 Sobre o Negócio</h2>
-      <label>Setor de atuação:</label>
-      <input type="text" name="setor">
+  <label>Telefone</label>
+  <input type="text" name="telefone">
 
-      <label>Produtos ou serviços oferecidos:</label>
-      <textarea name="produtos"></textarea>
+  <label>Data do Preenchimento</label>
+  <input type="date" name="data_preenchimento">
 
-      <label>Público-alvo:</label>
-      <textarea name="publico"></textarea>
+  <label>Setor de atuação da empresa</label>
+  <input type="text" name="setor">
 
-      <label>Tem site ou landing page?</label>
-      <input type="url" name="site">
-    </div>
+  <label>Principais produtos/serviços oferecidos</label>
+  <textarea name="produtos_servicos"></textarea>
 
-    <div class="section">
-      <h2>✨ Objetivo do Agente</h2>
-      <label>O que o agente deve resolver?</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="objetivo" value="Atendimento de dúvidas"> Atendimento de dúvidas</label>
-        <label><input type="checkbox" name="objetivo" value="Agendamento/Reservas"> Agendamento/Reservas</label>
-        <label><input type="checkbox" name="objetivo" value="Captar leads"> Captar leads</label>
-        <label><input type="checkbox" name="objetivo" value="Suporte técnico"> Suporte técnico</label>
-        <label><input type="checkbox" name="objetivo" value="Direcionar para canais"> Direcionar para canais</label>
-        <label><input type="checkbox" name="objetivo" value="Outro"> Outro:</label>
-        <input type="text" name="objetivoOutro">
-      </div>
+  <label>Público-alvo ideal</label>
+  <textarea name="publico_alvo"></textarea>
 
-      <label>O que o agente NÃO pode fazer?</label>
-      <textarea name="naoPode"></textarea>
-    </div>
+  <label>Website oficial ou redes sociais</label>
+  <input type="url" name="site">
 
-    <div class="section">
-      <h2>❓ Perguntas Frequentes</h2>
-      <p>Liste até 10 dúvidas reais que seus clientes costumam ter:</p>
-      <div id="faq-list">
-        <input type="text" name="faq1" placeholder="1." />
-        <input type="text" name="faq2" placeholder="2." />
-        <input type="text" name="faq3" placeholder="3." />
-        <input type="text" name="faq4" placeholder="4." />
-        <input type="text" name="faq5" placeholder="5." />
-        <input type="text" name="faq6" placeholder="6." />
-        <input type="text" name="faq7" placeholder="7." />
-        <input type="text" name="faq8" placeholder="8." />
-        <input type="text" name="faq9" placeholder="9." />
-        <input type="text" name="faq10" placeholder="10." />
-      </div>
-    </div>
+  <label>Objetivo principal do agente inteligente</label>
+  <textarea name="objetivo_agente"></textarea>
 
-    <div class="section">
-      <h2>🧱 Informações Fixas</h2>
-      <label>Endereço completo:</label>
-      <textarea name="endereco"></textarea>
+  <label>Informações que o agente NÃO pode dizer (restrições)</label>
+  <textarea name="restricoes"></textarea>
 
-      <label>Horários de funcionamento:</label>
-      <textarea name="horario"></textarea>
+  <label>Perguntas frequentes (FAQ)</label>
+  <textarea name="faq"></textarea>
 
-      <label>Formas de pagamento aceitas:</label>
-      <textarea name="pagamento"></textarea>
+  <label>Informações fixas que o agente deve citar (ex: link de WhatsApp, contato, etc)</label>
+  <textarea name="info_fixas"></textarea>
 
-      <label>Política de reagendamento ou cancelamento:</label>
-      <textarea name="politica"></textarea>
+  <label>Tom de voz desejado (ex: informal, profissional, divertido, religioso, neutro, etc)</label>
+  <input type="text" name="tom_de_voz">
 
-      <label>Prazo médio de entrega ou execução:</label>
-      <textarea name="prazo"></textarea>
+  <label>
+    <input type="checkbox" name="etico_cristao"> Deseja que o agente siga princípios éticos cristãos?
+  </label>
 
-      <label>Outros dados importantes:</label>
-      <textarea name="outros"></textarea>
-    </div>
+  <label>Integrações desejadas (ex: Kommo, Notion, Google Sheets, N8N...)</label>
+  <textarea name="integracoes"></textarea>
 
-    <div class="section">
-      <h2>📣 Tom de Voz do Atendimento</h2>
-      <label>Selecione o estilo desejado:</label>
-      <div class="radio-group">
-        <label><input type="radio" name="tom" value="Formal e técnico"> Formal e técnico</label>
-        <label><input type="radio" name="tom" value="Educado e objetivo"> Educado e objetivo</label>
-        <label><input type="radio" name="tom" value="Informal e amigável"> Informal e amigável</label>
-        <label><input type="radio" name="tom" value="Carismático e criativo"> Carismático e criativo</label>
-        <label><input type="radio" name="tom" value="Outro"> Outro:</label>
-        <input type="text" name="tomOutro">
-      </div>
+  <label>Links de anexos importantes (PDFs, catálogos, apresentações...)</label>
+  <textarea name="anexos"></textarea>
 
-      <label>O agente deve ter tom cristão/ético (sem urgência falsa)?</label>
-      <select name="tomCristao">
-        <option value="">Selecione</option>
-        <option value="Sim">Sim</option>
-        <option value="Não">Não</option>
-      </select>
-    </div>
+  <label>Observações finais</label>
+  <textarea name="observacoes_finais"></textarea>
 
-    <div class="section">
-      <h2>🚩 Restrições e Cuidados</h2>
-      <label>Informações que o agente NÃO pode divulgar:</label>
-      <textarea name="restricoes"></textarea>
+  <button type="submit">Enviar formulário</button>
+</form>
 
-      <label>Erros inaceitáveis:</label>
-      <textarea name="erros"></textarea>
+<footer>
+  &copy; 2025 Figueira Marketing — Todos os direitos reservados.
+</footer>
 
-      <label>O que não pode faltar de jeito nenhum:</label>
-      <textarea name="essencial"></textarea>
-    </div>
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js'
 
-    <div class="section">
-      <h2>🔗 Links e Integrações</h2>
-      <label>Link do WhatsApp com UTM (se houver):</label>
-      <input type="url" name="whatsapp">
+  const SUPABASE_URL = 'https://wzeltidcqegclovfxayd.supabase.co'
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6ZWx0aWRjcWVnY2xvdmZ4YXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyMTc1MTcsImV4cCI6MjA3Mzc5MzUxN30.MZ0Kgrg6dpzfvmXWaea15nZRfKSOBxop09t_TNd-uAI'
 
-      <label>Link de CRM:</label>
-      <input type="url" name="crm">
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-      <label>Link de agendamento online:</label>
-      <input type="url" name="agendamento">
+  document.getElementById("formulario").addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-      <label>Outras ferramentas:</label>
-      <textarea name="ferramentas"></textarea>
-    </div>
+    const formData = new FormData(e.target);
 
-    <div class="section">
-      <h2>📎 Anexos</h2>
-      <label>Link ou descrição dos logotipos:</label>
-      <textarea name="logos"></textarea>
+    const data = {
+      empresa: formData.get("empresa"),
+      responsavel: formData.get("responsavel"),
+      email: formData.get("email"),
+      telefone: formData.get("telefone"),
+      data_preenchimento: formData.get("data_preenchimento"),
+      setor: formData.get("setor"),
+      produtos_servicos: formData.get("produtos_servicos"),
+      publico_alvo: formData.get("publico_alvo"),
+      site: formData.get("site"),
+      objetivo_agente: formData.get("objetivo_agente"),
+      restricoes: formData.get("restricoes"),
+      faq: formData.get("faq"),
+      info_fixas: formData.get("info_fixas"),
+      tom_de_voz: formData.get("tom_de_voz"),
+      etico_cristao: formData.get("etico_cristao") === "on",
+      integracoes: formData.get("integracoes"),
+      anexos: formData.get("anexos"),
+      observacoes_finais: formData.get("observacoes_finais")
+    };
 
-      <label>Outros materiais de apoio:</label>
-      <textarea name="materiais"></textarea>
-    </div>
+    const { error } = await supabase
+      .from('respostas_formulario')
+      .insert([data]);
 
-    <div class="section">
-      <h2>📌 Observações Finais</h2>
-      <label>Observações adicionais:</label>
-      <textarea name="obs"></textarea>
-    </div>
-
-    <div class="buttons">
-      <button type="button" class="btn btn-prev" onclick="prevSection()">Voltar</button>
-      <button type="button" class="btn btn-next" onclick="nextSection()">Próxima etapa</button>
-      <button type="submit" class="btn btn-submit" style="display: none;">Enviar</button>
-    </div>
-  </form>
-
-  <script>
-    const sections = document.querySelectorAll('.section');
-    const nextBtn = document.querySelector('.btn-next');
-    const prevBtn = document.querySelector('.btn-prev');
-    const submitBtn = document.querySelector('.btn-submit');
-    let current = 0;
-
-    function showSection(index) {
-      sections.forEach((section, i) => section.classList.toggle('active', i === index));
-      prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
-      nextBtn.style.display = index === sections.length - 1 ? 'none' : 'inline-block';
-      submitBtn.style.display = index === sections.length - 1 ? 'inline-block' : 'none';
+    if (error) {
+      alert("❌ Erro ao enviar: " + error.message);
+    } else {
+      alert("✅ Formulário enviado com sucesso!");
+      e.target.reset();
     }
+  });
+</script>
 
-    function nextSection() {
-      if (current < sections.length - 1) {
-        current++;
-        showSection(current);
-      }
-    }
-
-    function prevSection() {
-      if (current > 0) {
-        current--;
-        showSection(current);
-      }
-    }
-
-    document.getElementById('formulario').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('Formulário enviado com sucesso!');
-    });
-
-    showSection(current);
-  </script>
 </body>
 </html>
