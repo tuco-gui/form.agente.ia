@@ -53,14 +53,18 @@
     .button-next:hover {
       background-color: #c5112f;
     }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Informações Básicas</h2>
-    <p class="description">Preencha abaixo os dados iniciais da sua empresa. Essas informações nos ajudarão a entender o contexto geral do seu negócio.</p>
+    <!-- Etapa 1 -->
+    <div id="step-1">
+      <h2>Informações Básicas</h2>
+      <p class="description">Preencha abaixo os dados iniciais da sua empresa. Essas informações nos ajudarão a entender o contexto geral do seu negócio.</p>
 
-    <form id="form-figueira">
       <label for="nome">Nome da empresa</label>
       <input type="text" id="nome" name="nome" required />
 
@@ -73,43 +77,44 @@
       <label for="estado">Estado</label>
       <select id="estado" name="estado" required>
         <option value="">Selecione o estado</option>
-        <option value="AC">AC</option>
-        <option value="AL">AL</option>
-        <option value="AP">AP</option>
-        <option value="AM">AM</option>
-        <option value="BA">BA</option>
-        <option value="CE">CE</option>
-        <option value="DF">DF</option>
-        <option value="ES">ES</option>
-        <option value="GO">GO</option>
-        <option value="MA">MA</option>
-        <option value="MT">MT</option>
-        <option value="MS">MS</option>
-        <option value="MG">MG</option>
-        <option value="PA">PA</option>
-        <option value="PB">PB</option>
-        <option value="PR">PR</option>
-        <option value="PE">PE</option>
-        <option value="PI">PI</option>
-        <option value="RJ">RJ</option>
-        <option value="RN">RN</option>
-        <option value="RS">RS</option>
-        <option value="RO">RO</option>
-        <option value="RR">RR</option>
-        <option value="SC">SC</option>
         <option value="SP">SP</option>
-        <option value="SE">SE</option>
-        <option value="TO">TO</option>
+        <option value="RJ">RJ</option>
+        <option value="MG">MG</option>
+        <!-- adicionar os outros estados... -->
       </select>
 
-      <button type="button" class="button-next" onclick="proximaSessao()">Próxima etapa</button>
-    </form>
+      <button type="button" class="button-next" onclick="mostrarProximaEtapa()">Próxima etapa</button>
+    </div>
+
+    <!-- Etapa 2 -->
+    <div id="step-2" class="hidden">
+      <h2>Sobre o Negócio</h2>
+      <p class="description">Agora nos conte um pouco sobre o seu negócio e sua atuação no mercado.</p>
+
+      <label for="segmento">Qual é o segmento da sua empresa?</label>
+      <input type="text" id="segmento" name="segmento" required />
+
+      <label for="tempo">Há quanto tempo o negócio está ativo?</label>
+      <input type="text" id="tempo" name="tempo" placeholder="Ex: 3 anos" required />
+
+      <label for="descricao">Descreva brevemente sua empresa</label>
+      <textarea id="descricao" name="descricao" rows="5" required></textarea>
+
+      <button type="button" class="button-next" onclick="mostrarEtapa3()">Próxima etapa</button>
+    </div>
+
+    <!-- Você pode continuar adicionando outras etapas com o mesmo padrão -->
   </div>
 
   <script>
-    function proximaSessao() {
-      alert("Aqui entrará a próxima sessão: 'Sobre o negócio'");
-      // Quando você me disser, eu substituo esse alert pela próxima seção do formulário.
+    function mostrarProximaEtapa() {
+      document.getElementById('step-1').classList.add('hidden');
+      document.getElementById('step-2').classList.remove('hidden');
+    }
+
+    function mostrarEtapa3() {
+      // Aqui virá a lógica para mostrar a Etapa 3 quando ela for criada
+      alert("Aqui entra a Etapa 3: Objetivos do negócio");
     }
   </script>
 </body>
