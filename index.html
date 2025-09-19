@@ -319,7 +319,6 @@
       const faq=buildFAQ(full);
       const info_fixas=buildInfoFixas(full);
       const tom_de_voz=buildTom(full);
-      const etico_cristao=(full.tomCristao||"").trim()||null;
       const integracoes=buildIntegracoes(full);
       const anexos=buildAnexos(full);
       const observacoes_finais=(full.obs||"").trim()||null;
@@ -329,7 +328,7 @@
       return {
         empresa, responsavel, email, telefone, data_preenchimento, setor,
         produtos_servicos, publico_alvo, site,
-        objetivo_agente, restricoes, faq, info_fixas, tom_de_voz, etico_cristao,
+        objetivo_agente, restricoes, faq, info_fixas, tom_de_voz,
         integracoes, anexos, observacoes_finais,
         payload: full
       };
